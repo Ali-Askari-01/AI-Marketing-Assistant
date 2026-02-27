@@ -69,7 +69,7 @@ The **AI Marketing Command Center** is an end-to-end SaaS platform that acts as 
 ### Prerequisites
 - Node.js 16+ or Python 3.11+
 - Docker & Docker Compose
-- MongoDB Atlas (for production)
+- SQLite (for production)
 - Redis Cloud (for production)
 - OpenAI API key (for AI features)
 
@@ -114,7 +114,7 @@ python server.py
 # Set environment variables
 export SECRET_KEY="your-secret-key"
 export OPENAI_API_KEY="your-openai-api-key"
-export MONGO_ROOT_PASSWORD="your-mongo-password"
+export sqlite_ROOT_PASSWORD="your-sqlite-password"
 export GRAFANA_PASSWORD="your-grafana-password"
 
 # Deploy full stack
@@ -149,7 +149,7 @@ The application includes a demo mode that works without backend setup:
 - **Security Layer**: JWT authentication, rate limiting, CORS, CSRF protection
 - **API Endpoints**: 27 production-ready endpoints with proper error handling
 - **AI Integration**: OpenAI API with retry logic and cost tracking
-- **Database**: MongoDB with proper indexing and schema validation
+- **Database**: SQLite with SQLAlchemy ORM
 - **Cache**: Redis for performance optimization
 - **Background Jobs**: Celery for async task processing
 - **Monitoring**: Prometheus metrics and health checks
@@ -164,7 +164,7 @@ The application includes a demo mode that works without backend setup:
 
 #### 🐳 Container Infrastructure (Docker)
 - **Multi-stage Builds**: Optimized Docker images for production
-- **Docker Compose**: Full stack with MongoDB, Redis, Nginx, monitoring
+- **Docker Compose**: Full stack with SQLite, Redis, Nginx, monitoring
 - **Environment Management**: Production-ready environment configuration
 - **Health Checks**: Comprehensive health monitoring
 - **Volume Management**: Persistent data storage and backups
@@ -229,7 +229,7 @@ The application includes a demo mode that works without backend setup:
 
 #### 📈 Horizontal Scaling
 - **Load Balancing**: Nginx reverse proxy with multiple backend instances
-- **Database Sharding**: MongoDB sharding for large datasets
+- **Database Sharding**: SQLite with proper indexing
 - **Cache Clustering**: Redis cluster for distributed caching
 - **Microservices**: Modular architecture for independent scaling
 - **Auto-scaling**: Kubernetes HPA for automatic scaling
@@ -279,14 +279,14 @@ The AI Marketing Command Center implements a complete enterprise-grade 6-layer a
 - **Complete AI Flow**: Prompt → AI Client → Validation → Retry → Cost Tracking
 
 #### 🗄️ **Layer 5: Data Layer**
-- **MongoDB Models**: User, Business, Campaign, Content, Analytics, Messages, AILogs
+- **SQLite Models**: User, Business, Campaign, Content, Analytics, Messages, AILogs
 - **Repository Pattern**: Clean data access with BaseRepository, UserRepository, etc.
 - **Database Relationships**: User → Business → Campaign → Content structure
 - **Index Strategy**: Optimized indexes for performance
 - **Connection Management**: Proper connection pooling and error handling
 
 #### 🚀 **Layer 6: Infrastructure Layer**
-- **MongoDB**: Primary database for flexible document storage
+- **SQLite**: Primary database for flexible document storage
 - **Environment Configuration**: Centralized configuration with Pydantic
 - **Logging & Monitoring**: Structured logging with correlation IDs
 - **Health Checks**: Application and database health endpoints
@@ -461,7 +461,7 @@ User Login → OAuth Provider → Token Exchange → User Profile → JWT Genera
 
 ### Database Schema Design
 
-#### MongoDB Collections
+#### SQLite Collections
 ```javascript
 // Users Collection
 {
@@ -670,7 +670,7 @@ User Login → OAuth Provider → Token Exchange → User Profile → JWT Genera
 - **Frontend**: HTML5, CSS3, JavaScript, Tailwind CSS
 - **Backend**: Node.js, Express, Python, FastAPI
 - **AI**: OpenAI GPT-4.5, LangChain
-- **Database**: MongoDB, PostgreSQL, Redis
+- **Database**: SQLite (SQLAlchemy)
 - **Deployment**: Docker, Vercel, Render
 
 ---

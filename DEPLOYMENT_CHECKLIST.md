@@ -12,7 +12,7 @@ Use this checklist to track your deployment progress.
 
 ## 🗄️ Database Setup
 
-- [ ] MongoDB plugin added to Railway project
+- [ ] SQLite embedded (no external DB needed)
 - [ ] Redis plugin added to Railway project
 - [ ] Both databases are provisioned and running
 - [ ] Connection strings verified in Railway dashboard
@@ -25,7 +25,7 @@ Use this checklist to track your deployment progress.
   - [ ] `PORT=8000`
   - [ ] `ENVIRONMENT=production`
   - [ ] `SECRET_KEY=<generated>`
-  - [ ] `MONGODB_URL=${{MongoDB.MONGO_URL}}`
+  - [ ] `DATABASE_URL=sqlite:///./aimarketing.db`
   - [ ] `REDIS_URL=${{Redis.REDIS_URL}}`
   - [ ] `OPENAI_API_KEY=<your-key>`
   - [ ] `GEMINI_API_KEY=<your-key>`
@@ -97,7 +97,7 @@ Fill in your deployed URLs:
 Frontend:  https://_________________________________
 Backend:   https://_________________________________
 LangChain: https://_________________________________
-MongoDB:   (internal) ${{MongoDB.MONGO_URL}}
+SQLite:   (internal) ${{SQLite embedded}}
 Redis:     (internal) ${{Redis.REDIS_URL}}
 ```
 
@@ -114,7 +114,7 @@ If something doesn't work:
    - Ensure `FRONTEND_URL` is set in backend
    - Check allowed origins in `main.py`
 5. **Database Connection**: 
-   - Check MongoDB and Redis are running
+   - Check SQLite and Redis are running
    - Verify connection string format
 
 ## 📞 Support

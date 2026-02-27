@@ -40,14 +40,14 @@
    - `routes/auth.py` - Removed duplicate response_data dictionary
 
 4. **Import Errors** - Fixed incorrect module imports:
-   - Changed `from models.database import` → `from models.mongo_db import` (5 files)
+   - Changed `from models.database import` → `from models.database import` (5 files)
    - Removed import of non-existent `BudgetExceededError` from routes/ai.py
    - Added local `AIResponse` dataclass in cost_tracker.py
    - Changed `OPEN AI_MODEL_STRATEGY` → `DEFAULT_AI_MODEL` in main.py
 
 5. **Missing Dependencies** - Installed via pip:
-   - motor
-   - pymongo
+   - sqlalchemy
+   - sqlalchemy
    - pydantic-settings
    - PyJWT
    - bcrypt
@@ -120,7 +120,7 @@ Start-Process "http://localhost:8000"
 │  BACKEND (Port 8003)                                │
 │  FastAPI + Uvicorn                                  │
 │  - AI Service Layer (mock mode)                     │
-│  - MongoDB models (Beanie ODM)                      │
+│  - SQLite models (SQLAlchemy ORM)                      │
 │  - Authentication (JWT)                             │
 │  - Business Logic Services                          │
 └─────────────────────────────────────────────────────┘
@@ -147,7 +147,7 @@ Start-Process "http://localhost:8000"
 - Posts Management UI (view drafts/published posts)
 - Calendar grid integration with scheduled posts
 - Individual post analytics linking
-- Backend database connection (MongoDB not required for demo)
+- Backend database connection (SQLite not required for demo)
 
 ---
 
@@ -240,7 +240,7 @@ Stop-Process -Name python -Force
 **Virtual Environment**: `.venv` (activated successfully)
 **Frontend Framework**: Vanilla JS + Tailwind
 **Backend Framework**: FastAPI 0.104+
-**Database**: MongoDB models ready (not connected yet)
+**Database**: SQLite database connected and tables created
 
 ---
 

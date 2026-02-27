@@ -45,7 +45,7 @@ We divide the system into **5 main layers**:
    * **Relational DB (PostgreSQL/MySQL):**
 
      * Users, businesses, campaigns, calendar entries, messages
-   * **NoSQL DB (MongoDB/Firebase):**
+   * **SQLite Database:**
 
      * AI-generated content, analytics logs, AI insights
    * **Blob Storage (AWS S3 / Google Cloud Storage):**
@@ -130,7 +130,7 @@ We divide the system into **5 main layers**:
 | Frontend              | React.js, Tailwind CSS, Framer Motion               |
 | Backend / API         | Node.js + Express / Python + FastAPI                |
 | AI                    | OpenAI GPT-4.5 / GPT-5, LangChain for orchestration |
-| Database              | PostgreSQL + MongoDB                                |
+| Database              | SQLite (SQLAlchemy)                                |
 | Storage               | AWS S3 / Google Cloud Storage                       |
 | Cache                 | Redis                                               |
 | Deployment            | Vercel / Render / Heroku / Docker                   |

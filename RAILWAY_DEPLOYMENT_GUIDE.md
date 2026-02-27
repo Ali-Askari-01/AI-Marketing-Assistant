@@ -9,7 +9,7 @@ This guide walks you through deploying your AI Marketing Command Center on Railw
 3. **Frontend** (Static Site) - Port 3000
 
 Plus 2 managed databases:
-- **MongoDB** (Railway Plugin)
+- **SQLite** (Railway Plugin)
 - **Redis** (Railway Plugin)
 
 ---
@@ -45,11 +45,11 @@ railway --version
 
 ### **Part 3: Add Databases**
 
-#### 3.1 Add MongoDB
+#### 3.1 Add SQLite
 1. In your project, click **"+ New"**
-2. Select **"Database"** → **"Add MongoDB"**
+2. Select **"Database"** → **"Add SQLite"**
 3. Wait for provisioning (1-2 minutes)
-4. Note: Connection string will be automatically available as `MONGO_URL`
+4. Note: Connection string will be automatically available as `sqlite_URL`
 
 #### 3.2 Add Redis
 1. Click **"+ New"** again
@@ -83,7 +83,7 @@ ENVIRONMENT=production
 SECRET_KEY=<generate-a-secure-random-string-here>
 
 # Database (Auto-filled by Railway plugins)
-MONGODB_URL=${{MongoDB.MONGO_URL}}
+DATABASE_URL=sqlite:///./aimarketing.db
 REDIS_URL=${{Redis.REDIS_URL}}
 
 # AI API Keys (Add your own)
@@ -227,7 +227,7 @@ For each service:
 
 **Estimated Monthly Cost**:
 - 3 Services (Backend, AI, Frontend): ~$10-15/month
-- MongoDB + Redis: ~$5-10/month
+- SQLite: ~$5-10/month
 - **Total**: ~$20-30/month for small-medium traffic
 
 **Free Trial**: Railway offers $5 free credits to start.
@@ -247,8 +247,8 @@ For each service:
 - Check PORT is set correctly
 
 ### Database Connection Issues
-- Verify MongoDB and Redis plugins are running
-- Check connection string variables: `${{MongoDB.MONGO_URL}}`
+- Verify SQLite and Redis plugins are running
+- Check connection string variables: `${{SQLite embedded}}`
 - Test connection from backend logs
 
 ### CORS Errors
@@ -310,7 +310,7 @@ railway up
 PORT=8000
 ENVIRONMENT=production
 SECRET_KEY=<random-secure-string>
-MONGODB_URL=${{MongoDB.MONGO_URL}}
+DATABASE_URL=sqlite:///./aimarketing.db
 REDIS_URL=${{Redis.REDIS_URL}}
 OPENAI_API_KEY=<your-key>
 GEMINI_API_KEY=<your-key>
@@ -336,7 +336,7 @@ PORT=3000
 ## ✅ Post-Deployment Checklist
 
 - [ ] All 3 services are deployed and running
-- [ ] MongoDB connected successfully
+- [ ] SQLite database connected
 - [ ] Redis connected successfully
 - [ ] Frontend loads correctly
 - [ ] Backend API responds to health check
@@ -371,7 +371,7 @@ Your AI Marketing Command Center is now deployed on Railway!
 - [Railway Documentation](https://docs.railway.app)
 - [Railway Discord Community](https://discord.gg/railway)
 - [FastAPI Deployment Guide](https://fastapi.tiangolo.com/deployment/)
-- [MongoDB Atlas Alternative](https://www.mongodb.com/cloud/atlas) (if needed)
+- [SQLite Alternative](https://www.SQLite.com/cloud/atlas) (if needed)
 
 ---
 

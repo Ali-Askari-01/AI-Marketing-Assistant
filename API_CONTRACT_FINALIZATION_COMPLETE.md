@@ -504,7 +504,7 @@ All error codes are standardized and meaningful:
 - **Message Replies**: AI-powered customer replies
 
 ### ✅ **Database Integration**
-- **MongoDB Models**: Complete data models
+- **SQLite Models**: Complete data models
 - **Repository Pattern**: Clean data access
 - **Business Logic**: Service layer integration
 - **Data Validation**: Input validation and sanitization

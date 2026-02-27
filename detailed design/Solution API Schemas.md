@@ -18,10 +18,10 @@ FastAPI Backend (Core App)
         ↓
 AI Service Layer (OpenAI APIs)
         ↓
-MongoDB
+SQLite
         ↓
 Redis (Caching + Queues)
-2️⃣ MongoDB Schema Design (Detailed)
+2️⃣ SQLite Schema Design (Detailed)
 
 We’ll design collections per domain.
 
@@ -274,7 +274,7 @@ Hackathon Deployment:
 
 FastAPI → Render / Railway
 
-MongoDB Atlas
+SQLite
 
 Redis Cloud
 
@@ -377,7 +377,7 @@ I’ll design this in 3 levels:
                       ↓
       ┌───────────────┼───────────────┐
       ↓               ↓               ↓
- MongoDB Atlas     Redis Cloud     Object Storage
+ SQLite     Redis Cloud     Object Storage
    (Database)        (Cache)         (S3 / R2)
       ↓
    OpenAI API (AI Engine)
@@ -412,7 +412,7 @@ Uvicorn + Gunicorn
 
 🗄 Database
 
-MongoDB Atlas (Cloud hosted)
+SQLite (Cloud hosted)
 
 Free tier for hackathon
 
@@ -461,7 +461,7 @@ Users → Cloudflare CDN → Load Balancer → Kubernetes Cluster
                                          ↓
                     ┌───────────────┬───────────────┐
                     ↓               ↓               ↓
-               MongoDB Cluster    Redis Cluster    Worker Pods
+               SQLite Cluster    Redis Cluster    Worker Pods
                                                         ↓
                                                   AI Processing
                                                         ↓
@@ -510,7 +510,7 @@ AI worker pods
 
 Analytics worker pods
 
-4️⃣ MongoDB Cluster
+4️⃣ SQLite Cluster
 
 Production Setup:
 
@@ -578,7 +578,7 @@ Never hardcode:
 
 OpenAI keys
 
-Mongo URI
+sqlite URI
 
 Redis credentials
 
@@ -592,7 +592,7 @@ Secret manager (AWS Secrets Manager)
 
 TLS everywhere
 
-Encrypted MongoDB
+Encrypted SQLite
 
 Role-based access control
 
@@ -631,7 +631,7 @@ High error rate
 
 Redis queue overflow
 
-Mongo connection failures
+sqlite connection failures
 
 OpenAI API failure
 
@@ -660,7 +660,7 @@ status
 
 FastAPI async endpoints
 
-Async Mongo driver (Motor)
+Async sqlite driver (sqlalchemy)
 
 Async OpenAI calls
 

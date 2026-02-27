@@ -64,10 +64,18 @@ class Settings(BaseSettings):
     
     @property
     def get_allowed_origins(self) -> List[str]:
-        """Get CORS allowed origins including FRONTEND_URL"""
+        """Get CORS allowed origins including FRONTEND_URL and Railway domain"""
         origins = self.ALLOWED_ORIGINS.copy()
         if self.FRONTEND_URL and self.FRONTEND_URL not in origins:
             origins.append(self.FRONTEND_URL)
+        # Auto-add Railway domain if deployed there
+        import os
+        railway_domain = os.getenv("RAILWAY_PUBLIC_DOMAIN", "")
+        if railway_domain:
+            for scheme in ("https://", "http://"):
+                url = f"{scheme}{railway_domain}"
+                if url not in origins:
+                    origins.append(url)
         return origins
     
     # Monitoring and Performance

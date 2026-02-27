@@ -18,11 +18,8 @@ def generate_api_token():
 def check_env_vars():
     """Check if required environment variables are set"""
     required_vars = [
-        'OPENAI_API_KEY',
         'GEMINI_API_KEY',
         'SECRET_KEY',
-        'MONGODB_URL',
-        'REDIS_URL'
     ]
     
     missing = []
@@ -67,13 +64,9 @@ def print_deployment_info():
     print("-" * 60)
     print()
     print("1. Create Railway project")
-    print("2. Add MongoDB plugin")
-    print("3. Add Redis plugin")
-    print("4. Deploy backend service (root: backend)")
-    print("5. Deploy langchain service (root: langchain)")
-    print("6. Deploy frontend service (root: ux design)")
-    print("7. Update FRONTEND_URL in backend env vars")
-    print("8. Update config.js with backend URLs")
+    print("2. Deploy single service (backend serves frontend)")
+    print("3. Set environment variables (SECRET_KEY, GEMINI_API_KEY)")
+    print("4. Database is SQLite (embedded, no plugin needed)")
     print()
     
     print("=" * 60)
@@ -82,9 +75,7 @@ def print_deployment_info():
     print()
     print("[ ] Railway account created")
     print("[ ] GitHub repo connected")
-    print("[ ] MongoDB plugin added")
-    print("[ ] Redis plugin added")
-    print("[ ] OpenAI API key obtained")
+    print("[ ] Database: SQLite (embedded, no setup needed)")
     print("[ ] Gemini API key obtained")
     print("[ ] SECRET_KEY generated and set")
     print("[ ] Backend service deployed")

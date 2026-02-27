@@ -265,7 +265,7 @@ I have successfully implemented the **complete AI prompt architecture design** f
 - **Content**: Request context, conversation history, performance data
 - **Purpose**: Fast access to recent information for context continuity
 
-#### 🧠 **Campaign Memory (MongoDB)**
+#### 🧠 **Campaign Memory (SQLite)**
 - **Duration**: Persistent storage
 - **Storage**: Campaign performance history and learnings
 - **Content**: Past campaign results, high-performing content, optimization insights

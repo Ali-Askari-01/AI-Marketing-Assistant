@@ -92,7 +92,7 @@ Users can now plan, create, execute, analyze, and respond intelligently—delive
 
 #### 4️⃣ Data Layer
 - ✅ **Relational DB**: PostgreSQL for structured data (users, campaigns, messages)
-- ✅ **NoSQL DB**: MongoDB for AI content and analytics logs
+- ✅ **Database: SQLite with SQLAlchemy ORM
 - ✅ **Blob Storage**: AWS S3/Google Cloud Storage for media assets
 - ✅ **Caching**: Redis for fast data retrieval
 
@@ -108,7 +108,7 @@ Users can now plan, create, execute, analyze, and respond intelligently—delive
 | Frontend | React.js, Tailwind CSS, Framer Motion | ✅ Complete |
 | Backend | Node.js + Express / Python + FastAPI | ✅ Complete |
 | AI | OpenAI GPT-4.5, LangChain | ✅ Complete |
-| Database | PostgreSQL + MongoDB + Redis | ✅ Complete |
+| Database | PostgreSQL + SQLite | ✅ Complete |
 | Storage | AWS S3 / Google Cloud Storage | ✅ Ready |
 | Cache | Redis | ✅ Complete |
 | Deployment | Vercel / Render / Heroku / Docker | ✅ Ready |

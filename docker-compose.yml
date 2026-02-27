@@ -26,14 +26,12 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - DATABASE_URL=mongodb://mongodb:27017/aimarketing
-      - REDIS_URL=redis://redis:6379/0
+      - DATABASE_URL=sqlite:///./aimarketing.db
       - SECRET_KEY=${SECRET_KEY}
-      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
       - ENVIRONMENT=production
       - FRONTEND_URL=http://localhost:3000
     depends_on:
-      - mongodb
       - redis
     networks:
       - app-network
@@ -41,22 +39,6 @@ services:
     volumes:
       - ./backend:/app
       - ./logs:/app/logs
-
-  # MongoDB Database
-  mongodb:
-    image: mongo:7.0
-    ports:
-      - "27017:27017"
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=admin
-      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_ROOT_PASSWORD}
-      - MONGO_INITDB_DATABASE=aimarketing
-    volumes:
-      - mongodb_data:/data/db
-      - ./scripts/mongo-init:/docker-entrypoint-initdb.d
-    networks:
-      - app-network
-    restart: unless-stopped
 
   # Redis Cache
   redis:
@@ -92,12 +74,11 @@ services:
       context: backend
       dockerfile: Dockerfile.worker
     environment:
-      - DATABASE_URL=mongodb://mongodb:27017/aimarketing
+      - DATABASE_URL=sqlite:///./aimarketing.db
       - REDIS_URL=redis://redis:6379/0
       - CELERY_BROKER_URL=redis://redis:6379/0
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
     depends_on:
-      - mongodb
       - redis
     networks:
       - app-network
@@ -139,7 +120,6 @@ services:
     restart: unless-stopped
 
 volumes:
-  mongodb_data:
   redis_data:
   prometheus_data:
   grafana_data:

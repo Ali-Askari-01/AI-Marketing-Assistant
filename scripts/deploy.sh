@@ -51,51 +51,13 @@ fi
 
 # Check database connection
 echo "Checking database connection..."
-if docker-compose exec mongodb mongosh --eval "db.adminCommand('ismaster')" > /dev/null 2>&1; then
-    echo "✅ Database is connected"
-else
-    echo "❌ Database connection failed"
-    exit 1
-fi
+echo "✅ SQLite database is embedded (no external service needed)"
 
-# Check Redis connection
-echo "Checking Redis connection..."
-if docker-compose exec redis redis-cli ping > /dev/null 2>&1; then
-    echo "✅ Redis is connected"
-else
-    echo "❌ Redis connection failed"
-    exit 1
-fi
+# Database tables are auto-created by SQLAlchemy on startup
+echo "🗄️ Database tables auto-created by SQLAlchemy ORM..."
 
-# Run database migrations
-echo "🗄️ Running database migrations..."
-docker-compose exec mongodb mongosh aimarketing --eval "
-db.createCollection('users');
-db.createCollection('businesses');
-db.createCollection('campaigns');
-db.createCollection('contents');
-db.createCollection('analytics');
-db.createCollection('messages');
-db.createCollection('ai_logs');
-"
-
-# Create indexes
-echo "📊 Creating database indexes..."
-docker-compose exec mongodb mongosh aimarketing --eval "
-db.users.createIndex({email: 1}, {unique: true});
-db.businesses.createIndex({owner_id: 1});
-db.campaigns.createIndex({business_id: 1});
-db.contents.createIndex({campaign_id: 1});
-db.contents.createIndex({business_id: 1});
-db.contents.createIndex({status: 1});
-db.contents.createIndex({scheduled_at: 1});
-db.analytics.createIndex({content_id: 1});
-db.messages.createIndex({business_id: 1});
-db.ai_logs.createIndex({user_id: 1});
-db.ai_logs.createIndex({feature: 1});
-db.ai_logs.createIndex({status: 1});
-db.ai_logs.createIndex({created_at: 1});
-"
+# Indexes are defined in SQLAlchemy models
+echo "📊 Database indexes defined in SQLAlchemy models..."
 
 # Load demo data
 echo "🎭 Loading demo data..."

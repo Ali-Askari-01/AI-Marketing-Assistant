@@ -130,7 +130,7 @@
 
 #### 2. Database Context
 **Status**: ✅ Integrated (Existing)
-- MongoDB models for business profiles (context injection source)
+- SQLite models for business profiles (context injection source)
 - User and campaign data for personalization
 
 #### 3. Cost Tracking
@@ -342,7 +342,7 @@ AIService.getUsage('daily').then(console.log);
 - ✅ CORS configuration
 - ✅ Environment configuration
 - ✅ API documentation
-- ⚠️ Requires: OpenAI API key, MongoDB (optional), HTTPS for production
+- ⚠️ Requires: OpenAI API key, SQLite (optional), HTTPS for production
 
 ## 🔮 Future Enhancements
 
@@ -386,7 +386,7 @@ AIService.getUsage('daily').then(console.log);
 
 ### Required for Production ⚠️
 - [ ] Set OpenAI API key in `backend/.env`
-- [ ] Configure MongoDB connection (or use demo mode)
+- [ ] Configure SQLite connection (or use demo mode)
 - [ ] Set up HTTPS certificates
 - [ ] Configure production CORS origins
 - [ ] Set up monitoring (Prometheus/Grafana)

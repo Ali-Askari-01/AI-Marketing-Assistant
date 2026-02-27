@@ -270,7 +270,7 @@ if (window.location.hostname === 'localhost' || window.location.hostname === '12
 } else {
     // Production environment
     window.CONFIG.APP.DEBUG = false;
-    window.CONFIG.API.BASE_URL = 'https://your-production-api.com';
+    // BASE_URL stays '' (empty) so requests go to same origin (Railway single-service)
 }
 
 console.log('🔧 Configuration loaded:', window.CONFIG.APP.DEBUG ? window.CONFIG : 'Production mode');

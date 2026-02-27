@@ -152,7 +152,7 @@ Content → one Analytics record
 **Production-ready infrastructure with monitoring**
 
 #### 🐘 **Database Implementation**
-- **MongoDB**: Primary database for flexible document storage
+- **SQLite**: Primary database for flexible document storage
 - **Connection Management**: Proper connection pooling and error handling
 - **Migration Support**: Schema versioning and migration scripts
 
@@ -330,7 +330,7 @@ FastAPI Backend (6-Layer Architecture)
         |-- Analytics Engine
         |
         v
-MongoDB (Document Database)
+SQLite Database
         |
         v
 OpenAI API (GPT-4o-mini/GPT-4o)

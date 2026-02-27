@@ -7,8 +7,8 @@ const OAUTH_CONFIG = {
         scope: 'openid email profile',
         authUrl: 'https://accounts.google.com/o/oauth2/v2/auth',
         // Backend handles token exchange — no client secret in frontend
-        backendLogin: (window.CONFIG?.API?.BASE_URL || 'http://localhost:8003') + '/api/v1/auth/google/login',
-        backendCallback: (window.CONFIG?.API?.BASE_URL || 'http://localhost:8003') + '/api/v1/auth/google/callback',
+        backendLogin: (window.CONFIG?.API?.BASE_URL || 'http://localhost:8000') + '/api/v1/auth/google/login',
+        backendCallback: (window.CONFIG?.API?.BASE_URL || 'http://localhost:8000') + '/api/v1/auth/google/callback',
     },
 
     // LinkedIn OAuth
@@ -17,8 +17,8 @@ const OAUTH_CONFIG = {
         redirectUri: window.location.origin + '/login.html',
         scope: 'openid profile email',
         authUrl: 'https://www.linkedin.com/oauth/v2/authorization',
-        backendLogin: (window.CONFIG?.API?.BASE_URL || 'http://localhost:8003') + '/api/v1/auth/linkedin/login',
-        backendCallback: (window.CONFIG?.API?.BASE_URL || 'http://localhost:8003') + '/api/v1/auth/linkedin/callback',
+        backendLogin: (window.CONFIG?.API?.BASE_URL || 'http://localhost:8000') + '/api/v1/auth/linkedin/login',
+        backendCallback: (window.CONFIG?.API?.BASE_URL || 'http://localhost:8000') + '/api/v1/auth/linkedin/callback',
     }
 };
 

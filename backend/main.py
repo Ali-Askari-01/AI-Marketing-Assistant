@@ -755,7 +755,12 @@ GOOGLE_CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET", "")
 LINKEDIN_CLIENT_ID     = os.getenv("LINKEDIN_CLIENT_ID", "")
 LINKEDIN_CLIENT_SECRET = os.getenv("LINKEDIN_CLIENT_SECRET", "")
 
-FRONTEND_ORIGIN = os.getenv("FRONTEND_ORIGIN", "http://localhost:3000")
+# Auto-detect origin on Railway: use RAILWAY_PUBLIC_DOMAIN if available
+_railway_domain = os.getenv("RAILWAY_PUBLIC_DOMAIN", "")
+FRONTEND_ORIGIN = os.getenv(
+    "FRONTEND_ORIGIN",
+    f"https://{_railway_domain}" if _railway_domain else "http://localhost:8000",
+)
 
 # ── helpers ─────────────────────────────────────────────────────────────
 def _build_user_and_tokens(email, name, provider, picture="", provider_id=""):
@@ -2404,11 +2409,26 @@ async def _root_redirect():
     return _RR(url="/landing.html")
 
 # ══════════════════════════════════════════════════════════════════════════
-# SERVE FRONTEND STATIC FILES (must be LAST - catch-all)
+# OAUTH CALLBACK ROUTES → serve login.html so frontend JS handles the code
 # ══════════════════════════════════════════════════════════════════════════
+from fastapi.responses import FileResponse as _FR
 import pathlib as _pathlib
 
 _frontend_dir = _pathlib.Path(__file__).resolve().parent.parent / "ux design"
+
+@app.get("/auth/google/callback", include_in_schema=False)
+@app.get("/auth/linkedin/callback", include_in_schema=False)
+async def _oauth_callback_page():
+    """Serve login.html so handleOAuthCallback() can exchange the code param."""
+    login_page = _frontend_dir / "login.html"
+    if login_page.is_file():
+        return _FR(str(login_page), media_type="text/html")
+    return _RR(url="/login.html")
+
+# ══════════════════════════════════════════════════════════════════════════
+# SERVE FRONTEND STATIC FILES (must be LAST - catch-all)
+# ══════════════════════════════════════════════════════════════════════════
+
 if _frontend_dir.is_dir():
     # Serve CSS/JS/assets
     if (_frontend_dir / "css").is_dir():

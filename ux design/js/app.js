@@ -4025,7 +4025,7 @@ const app = {
                                     </div>
                                     <h4 class="font-semibold text-gray-900">Data Layer</h4>
                                 </div>
-                                <p class="text-gray-600 ml-11">PostgreSQL, MongoDB, Redis, AWS S3 for scalable data storage</p>
+                                <p class="text-gray-600 ml-11">SQLite, SQLAlchemy ORM for lightweight scalable data storage</p>
                             </div>
                             <div class="border-l-4 border-green-500 pl-4">
                                 <div class="flex items-center gap-3 mb-2">
@@ -4070,9 +4070,8 @@ const app = {
                                 <div>
                                     <h4 class="font-semibold text-gray-900 mb-3">Database</h4>
                                     <div class="flex flex-wrap gap-2">
-                                        <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded text-sm">PostgreSQL</span>
-                                        <span class="px-3 py-1 bg-green-100 text-green-700 rounded text-sm">MongoDB</span>
-                                        <span class="px-3 py-1 bg-red-100 text-red-700 rounded text-sm">Redis</span>
+                                        <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded text-sm">SQLite</span>
+                                        <span class="px-3 py-1 bg-green-100 text-green-700 rounded text-sm">SQLAlchemy</span>
                                     </div>
                                 </div>
                             </div>

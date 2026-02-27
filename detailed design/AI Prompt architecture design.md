@@ -75,7 +75,7 @@ Strategic reasoning
 
 🧱 Layer 2 – Context Injection
 
-Pulled from MongoDB:
+Pulled from SQLite database:
 
 Business profile
 
@@ -287,7 +287,7 @@ Expires after 10 min
 
 Past campaign performance
 
-Stored in MongoDB
+Stored in SQLite database
 
 🧠 Embedding Memory (Future Upgrade)
 

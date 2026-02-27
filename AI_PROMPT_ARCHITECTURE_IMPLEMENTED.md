@@ -133,7 +133,7 @@ Successfully implemented the **complete AI prompt architecture design** from the
 - **Performance data**: Real-time metrics
 
 #### 🧠 **Campaign Memory**
-- **MongoDB storage**: Persistent campaign data
+- **SQLite storage**: Persistent campaign data
 - **Performance history**: Past campaign results
 - **Content library**: High-performing content
 - **Learnings**: Optimization insights

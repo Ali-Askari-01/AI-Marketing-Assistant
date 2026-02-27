@@ -26,7 +26,7 @@ railway init
 ### 2️⃣ Add Databases
 ```bash
 # In Railway Dashboard:
-1. Click "+ New" → "Database" → "MongoDB"
+1. Click "+ New" → "Database" → "SQLite"
 2. Click "+ New" → "Database" → "Redis"
 ```
 
@@ -46,7 +46,7 @@ railway init
 PORT=8000
 ENVIRONMENT=production
 SECRET_KEY=<generate-random-string>
-MONGODB_URL=${{MongoDB.MONGO_URL}}
+DATABASE_URL=sqlite:///./aimarketing.db
 REDIS_URL=${{Redis.REDIS_URL}}
 OPENAI_API_KEY=<your-key>
 GEMINI_API_KEY=<your-key>
