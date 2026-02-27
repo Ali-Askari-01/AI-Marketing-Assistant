@@ -6,7 +6,7 @@
 // Helper function to get API configuration
 function getAPIConfig() {
     return window.API || {
-        BASE_URL: 'http://localhost:8003',
+        BASE_URL: 'http://localhost:8000',
         ENDPOINTS: {
             ai: {
                 campaignCalendar: '/api/v1/ai/strategy/campaign-calendar',

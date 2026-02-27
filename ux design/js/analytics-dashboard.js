@@ -10,7 +10,7 @@ const AnalyticsDashboard = {
     init() {
         this.baseUrl = (window.CONFIG && window.CONFIG.API && window.CONFIG.API.BASE_URL)
             ? window.CONFIG.API.BASE_URL
-            : 'http://localhost:8003';
+            : 'http://localhost:8000';
         console.log('[AnalyticsDashboard] Initialized with baseUrl:', this.baseUrl);
     },
 

@@ -10,7 +10,7 @@ const AIChatPanel = {
     isOpen: false,
     messages: [],
     isLoading: false,
-    baseUrl: (window.CONFIG && window.CONFIG.API && window.CONFIG.API.BASE_URL) || 'http://localhost:8003',
+    baseUrl: (window.CONFIG && window.CONFIG.API && window.CONFIG.API.BASE_URL) || 'http://localhost:8000',
 
     // ── Render the panel HTML (injected once) ──────────────────────
     inject() {
@@ -171,7 +171,7 @@ const AIChatPanel = {
                     : '⚡ Answered via Rules Engine (offline)';
             }
         } catch (err) {
-            this._replaceMsg(typingId, 'ai', '<span style="color:#f87171;">Network error — please check your backend is running on port 8003.</span>');
+            this._replaceMsg(typingId, 'ai', '<span style="color:#f87171;">Network error — please check your backend is running.</span>');
         }
 
         this.isLoading = false;
