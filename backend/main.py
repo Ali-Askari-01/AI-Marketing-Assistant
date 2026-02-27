@@ -3,6 +3,9 @@ Omni Mind - AI Marketing Backend
 Single app, SQLite database, Gemini AI Agent integration
 """
 
+from dotenv import load_dotenv
+load_dotenv()
+
 from fastapi import FastAPI, HTTPException, Depends, Request, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.trustedhost import TrustedHostMiddleware

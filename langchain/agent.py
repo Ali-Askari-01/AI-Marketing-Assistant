@@ -12,7 +12,7 @@ from pydantic import BaseModel
 from typing import Optional
 
 # ── Configure Gemini ────────────────────────────────────────────────
-GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY", "AIzaSyCczWxiW2Shg9D-xTQYeTyYAWyLOkkbkbs")
+GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY", "")
 genai.configure(api_key=GOOGLE_API_KEY)
 
 MODEL = genai.GenerativeModel(

@@ -3,7 +3,7 @@
 ## ✅ What Was Done
 
 ### 1. **Gemini AI Agent Setup**
-- ✅ Configured Google Gemini API (API Key: AIzaSyC1ivqzcXlHanUqmQsASvTrT2shRZUypCs)
+- ✅ Configured Google Gemini API (API Key: set via GOOGLE_API_KEY env var)
 - ✅ Created LangChain agent with marketing expertise
 - ✅ Built FastAPI wrapper for the agent
 - ✅ Added mock search tool for demo mode
@@ -301,7 +301,7 @@ generateHashtags("Launching our new product today!");
 
 ### Environment Variables (`.env`):
 ```env
-GOOGLE_API_KEY=AIzaSyC1ivqzcXlHanUqmQsASvTrT2shRZUypCs
+GOOGLE_API_KEY=<your-gemini-api-key>
 SERPAPI_API_KEY=test_key_for_demo
 ```
 

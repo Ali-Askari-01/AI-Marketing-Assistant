@@ -31,7 +31,7 @@ except ImportError:
 
 GEMINI_API_KEY = os.getenv(
     "GEMINI_API_KEY",
-    os.getenv("GOOGLE_API_KEY", "AIzaSyCczWxiW2Shg9D-xTQYeTyYAWyLOkkbkbs"),
+    os.getenv("GOOGLE_API_KEY", ""),
 )
 
 _model = None
