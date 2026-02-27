@@ -614,8 +614,11 @@ body {
    ============================================ */
 
 /* Override Tailwind bg classes for dark theme */
-.bg-gray-50, .bg-white { background-color: var(--bg-primary) !important; }
+.bg-gray-50 { background-color: var(--bg-primary) !important; }
+.bg-white { background-color: var(--bg-card) !important; }
 .bg-gray-100 { background-color: var(--bg-secondary) !important; }
+.bg-gray-200 { background-color: rgba(255, 255, 255, 0.06) !important; }
+.bg-gray-300 { background-color: rgba(255, 255, 255, 0.08) !important; }
 
 /* Override border colors */
 .border-gray-200, .border-gray-100, .border-gray-300 { border-color: var(--border-secondary) !important; }
@@ -652,6 +655,27 @@ body {
 .bg-yellow-100 { background-color: rgba(245, 158, 11, 0.12) !important; }
 .bg-indigo-50, .from-indigo-50 { background-color: rgba(99, 102, 241, 0.06) !important; }
 .bg-amber-100 { background-color: rgba(245, 158, 11, 0.12) !important; }
+
+/* Text color overrides for colored text on dark bg */
+.text-blue-700 { color: #93c5fd !important; }
+.text-blue-600 { color: #60a5fa !important; }
+.text-purple-700 { color: #c4b5fd !important; }
+.text-orange-700 { color: #fdba74 !important; }
+.text-green-700 { color: #6ee7b7 !important; }
+.text-red-700 { color: #fca5a5 !important; }
+.text-yellow-600 { color: #fcd34d !important; }
+.text-green-600 { color: #6ee7b7 !important; }
+.text-indigo-600 { color: #a5b4fc !important; }
+.text-pink-600 { color: #f9a8d4 !important; }
+
+/* Hover bg overrides */
+.hover\:bg-gray-50:hover { background-color: var(--bg-card-hover) !important; }
+.hover\:bg-gray-100:hover { background-color: var(--bg-card-hover) !important; }
+.hover\:bg-teal-50:hover { background-color: rgba(99, 102, 241, 0.12) !important; }
+
+/* Ring overrides */
+.ring-teal-500 { --tw-ring-color: rgba(99, 102, 241, 0.5) !important; }
+.focus\:ring-teal-500:focus { --tw-ring-color: rgba(99, 102, 241, 0.5) !important; }
 
 /* Border color overrides */
 .border-teal-200 { border-color: rgba(99, 102, 241, 0.2) !important; }
@@ -693,6 +717,18 @@ input[type="checkbox"] {
 .hover\:bg-blue-100:hover { background-color: rgba(59, 130, 246, 0.12) !important; }
 .hover\:bg-green-100:hover { background-color: rgba(16, 185, 129, 0.12) !important; }
 .hover\:bg-pink-100:hover { background-color: rgba(236, 72, 153, 0.12) !important; }
+
+/* Gradient overrides for dark theme */
+.bg-gradient-to-r.from-indigo-50.to-purple-50 {
+    background: linear-gradient(to right, rgba(99, 102, 241, 0.08), rgba(139, 92, 246, 0.08)) !important;
+}
+.bg-gradient-to-br.from-teal-50.to-green-50 {
+    background: linear-gradient(to bottom right, rgba(99, 102, 241, 0.08), rgba(16, 185, 129, 0.08)) !important;
+}
+.from-indigo-50 { --tw-gradient-from: rgba(99, 102, 241, 0.08) !important; }
+.to-purple-50 { --tw-gradient-to: rgba(139, 92, 246, 0.08) !important; }
+.from-teal-50 { --tw-gradient-from: rgba(99, 102, 241, 0.08) !important; }
+.to-green-50 { --tw-gradient-to: rgba(16, 185, 129, 0.08) !important; }
 
 /* Gradient overrides */
 .from-teal-500 { --tw-gradient-from: #6366f1 !important; }

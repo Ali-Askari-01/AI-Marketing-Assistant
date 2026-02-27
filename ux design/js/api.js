@@ -1,7 +1,7 @@
 // API Integration Layer - Connects frontend to FastAPI backend
 class MarketingAPI {
     constructor() {
-        this.baseURL = 'http://localhost:8003/api'; // FastAPI backend
+        this.baseURL = 'http://localhost:8000/api'; // FastAPI backend
         this.token = localStorage.getItem('auth_token');
     }
 

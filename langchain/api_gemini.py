@@ -175,5 +175,7 @@ async def get_campaign_advice(query: QueryInput):
 
 if __name__ == "__main__":
     import uvicorn
-    print("🚀 Starting Gemini AI Agent API on port 8004...")
-    uvicorn.run(app, host="0.0.0.0", port=8004, reload=True)
+    import os
+    port = int(os.getenv("PORT", 8001))
+    print(f"🚀 Starting Gemini AI Agent API on port {port}...")
+    uvicorn.run(app, host="0.0.0.0", port=port, reload=False)

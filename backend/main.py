@@ -1,5 +1,5 @@
 """
-AI Marketing Command Center - FastAPI Backend
+Omni Mind - AI Marketing Backend
 Single app, SQLite database, Gemini AI Agent integration
 """
 
@@ -9,6 +9,7 @@ from fastapi.middleware.trustedhost import TrustedHostMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from fastapi.responses import JSONResponse, HTMLResponse
+from fastapi.staticfiles import StaticFiles
 import asyncio
 import logging
 import time
@@ -163,8 +164,8 @@ async def get_current_user(
 # FastAPI Application  (SINGLE instance)
 # ══════════════════════════════════════════════════════════════════════════
 app = FastAPI(
-    title="AI Marketing Command Center API",
-    description="AI-powered marketing automation with SQLite & Gemini",
+    title="Omni Mind API",
+    description="Omni Mind - AI-powered marketing automation",
     version="1.0.0",
     docs_url="/docs",
     redoc_url="/redoc",
@@ -173,14 +174,14 @@ app = FastAPI(
 # ── Middleware ───────────────────────────────────────────────────────────
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.ALLOWED_ORIGINS,
+    allow_origins=settings.get_allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 app.add_middleware(
     TrustedHostMiddleware,
-    allowed_hosts=["localhost", "127.0.0.1", "*.aimarketing.ai"],
+    allowed_hosts=["*"],
 )
 app.add_middleware(GZipMiddleware, minimum_size=1000)
 
@@ -1239,6 +1240,36 @@ async def get_me(credentials: HTTPAuthorizationCredentials = Depends(security)):
 
 @app.post("/api/auth/signout", response_model=SuccessResponse)
 async def sign_out(credentials: HTTPAuthorizationCredentials = Depends(security)):
+    return SuccessResponse(message="Signed out")
+
+
+# ── V1 Aliases for Auth (frontend uses /api/v1/auth/*) ──────────────────
+@app.post("/api/v1/auth/login", response_model=SuccessResponse)
+@limiter.limit("5/minute")
+async def email_login_v1(request: Request, login_data: dict):
+    return await email_login(request, login_data)
+
+
+@app.post("/api/v1/auth/register", response_model=SuccessResponse)
+@limiter.limit("3/minute")
+async def email_register_v1(request: Request, register_data: dict):
+    return await email_register(request, register_data)
+
+
+@app.post("/api/v1/auth/refresh", response_model=SuccessResponse)
+@limiter.limit("20/minute")
+async def refresh_token_v1(request: Request, credentials: HTTPAuthorizationCredentials = Depends(security)):
+    return await refresh_token_endpoint(request, credentials)
+
+
+@app.get("/api/v1/auth/me", response_model=SuccessResponse)
+async def get_me_v1(credentials: HTTPAuthorizationCredentials = Depends(security)):
+    return await get_me(credentials)
+
+
+@app.post("/api/v1/auth/signout", response_model=SuccessResponse)
+@app.post("/api/v1/auth/logout", response_model=SuccessResponse)
+async def sign_out_v1(credentials: HTTPAuthorizationCredentials = Depends(security)):
     return SuccessResponse(message="Signed out")
 
 
@@ -2347,13 +2378,55 @@ async def ai_analyze_post_endpoint(request: Request, body: dict):
 
 
 # ══════════════════════════════════════════════════════════════════════════
+# V1 AUTH ALIASES (frontend calls /api/v1/auth/login, backend has /api/auth/login)
+# ══════════════════════════════════════════════════════════════════════════
+@app.post("/api/v1/auth/login", response_model=SuccessResponse)
+@limiter.limit("5/minute")
+async def v1_email_login(request: Request, login_data: dict):
+    return await email_login(request, login_data)
+
+@app.post("/api/v1/auth/register", response_model=SuccessResponse)
+@limiter.limit("3/minute")
+async def v1_email_register(request: Request, register_data: dict):
+    return await email_register(request, register_data)
+
+
+# ══════════════════════════════════════════════════════════════════════════
+# ROOT REDIRECT → landing page
+# ══════════════════════════════════════════════════════════════════════════
+from fastapi.responses import RedirectResponse as _RR
+
+@app.get("/", include_in_schema=False)
+async def _root_redirect():
+    return _RR(url="/landing.html")
+
+# ══════════════════════════════════════════════════════════════════════════
+# SERVE FRONTEND STATIC FILES (must be LAST - catch-all)
+# ══════════════════════════════════════════════════════════════════════════
+import pathlib as _pathlib
+
+_frontend_dir = _pathlib.Path(__file__).resolve().parent.parent / "ux design"
+if _frontend_dir.is_dir():
+    # Serve CSS/JS/assets
+    if (_frontend_dir / "css").is_dir():
+        app.mount("/css", StaticFiles(directory=str(_frontend_dir / "css")), name="css")
+    if (_frontend_dir / "js").is_dir():
+        app.mount("/js", StaticFiles(directory=str(_frontend_dir / "js")), name="js")
+    # Serve root static files (HTML pages, images, etc.)
+    app.mount("/", StaticFiles(directory=str(_frontend_dir), html=True), name="frontend")
+    logger.info(f"Frontend static files mounted from {_frontend_dir}")
+else:
+    logger.warning(f"Frontend directory not found at {_frontend_dir}, static files not served")
+
+
+# ══════════════════════════════════════════════════════════════════════════
 # RUN
 # ══════════════════════════════════════════════════════════════════════════
 if __name__ == "__main__":
     uvicorn.run(
         "main:app",
         host="0.0.0.0",
-        port=8003,
+        port=settings.PORT,
         reload=settings.ENVIRONMENT == "development",
         reload_excludes=["*.log", "*.pyc", "__pycache__"],
         log_level="info",

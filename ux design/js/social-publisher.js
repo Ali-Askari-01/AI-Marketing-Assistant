@@ -12,7 +12,7 @@ const SocialPublisher = {
     // ── State ──────────────────────────────────────────────────────
     connected: false,
     accounts: { pages: [], instagram_accounts: [] },
-    baseUrl: (window.CONFIG?.API?.BASE_URL) || 'http://localhost:8003',
+    baseUrl: (window.CONFIG?.API?.BASE_URL) || 'http://localhost:8000',
     _panelInjected: false,
 
     // ── Theme tokens ───────────────────────────────────────────────

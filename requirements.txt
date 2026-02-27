@@ -1,4 +1,4 @@
-# Production-Ready Backend Dependencies
+# Production-Ready Dependencies for Omni Mind
 fastapi>=0.104.0
 uvicorn[standard]>=0.24.0
 pydantic>=2.5.0

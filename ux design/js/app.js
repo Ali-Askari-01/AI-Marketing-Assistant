@@ -2100,7 +2100,7 @@ const app = {
             localStorage.setItem('activeCampaign', JSON.stringify(campaign));
 
             // Also persist to backend (fire and forget — don't block on failure)
-            const baseUrl = (window.CONFIG && window.CONFIG.API && window.CONFIG.API.BASE_URL) || 'http://localhost:8003';
+            const baseUrl = (window.CONFIG && window.CONFIG.API && window.CONFIG.API.BASE_URL) || 'http://localhost:8000';
             fetch(`${baseUrl}/api/v1/campaigns`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -2166,7 +2166,7 @@ const app = {
                 }
             }
 
-            const baseUrl = (window.CONFIG && window.CONFIG.API && window.CONFIG.API.BASE_URL) || 'http://localhost:8003';
+            const baseUrl = (window.CONFIG && window.CONFIG.API && window.CONFIG.API.BASE_URL) || 'http://localhost:8000';
             
             // Try the agent endpoint first (most reliable)
             let strategy = null;
@@ -3019,7 +3019,7 @@ const app = {
             formData.append('file', file);
 
             const baseUrl = (window.CONFIG && window.CONFIG.API && window.CONFIG.API.BASE_URL)
-                ? window.CONFIG.API.BASE_URL : 'http://localhost:8003';
+                ? window.CONFIG.API.BASE_URL : 'http://localhost:8000';
 
             const resp = await fetch(`${baseUrl}/api/v1/ai/voice-to-campaign`, {
                 method: 'POST',
@@ -3242,7 +3242,7 @@ const app = {
         ctx.shadowBlur = 0;
         ctx.font = '12px Inter, Arial, sans-serif';
         ctx.globalAlpha = 0.7;
-        ctx.fillText('AI Marketing Command Center', 200, 185);
+        ctx.fillText('Omni Mind', 200, 185);
         ctx.globalAlpha = 1;
 
         preview.innerHTML = '';
@@ -3311,7 +3311,7 @@ const app = {
 
         this.showLoading();
         try {
-            const baseUrl = (window.CONFIG?.API?.BASE_URL) || 'http://localhost:8003';
+            const baseUrl = (window.CONFIG?.API?.BASE_URL) || 'http://localhost:8000';
             const resp = await fetch(`${baseUrl}/api/v1/agent/ask`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -3342,7 +3342,7 @@ const app = {
 
         this.showLoading();
         try {
-            const baseUrl = (window.CONFIG?.API?.BASE_URL) || 'http://localhost:8003';
+            const baseUrl = (window.CONFIG?.API?.BASE_URL) || 'http://localhost:8000';
             const resp = await fetch(`${baseUrl}/api/v1/agent/ask`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -3544,7 +3544,8 @@ const app = {
         // Blanks before first day
         for (let i = 0; i < firstDay; i++) {
             const blank = document.createElement('div');
-            blank.className = 'bg-gray-50 min-h-[80px]';
+            blank.className = 'min-h-[80px]';
+            blank.style.cssText = 'background:rgba(255,255,255,0.02);';
             grid.appendChild(blank);
         }
 
@@ -3552,11 +3553,15 @@ const app = {
             const cell = document.createElement('div');
             const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
             const isToday = (today.getFullYear() === year && today.getMonth() === month && today.getDate() === day);
-            cell.className = `bg-white min-h-[80px] p-1 calendar-day cursor-pointer hover:bg-teal-50 transition relative ${isToday ? 'ring-2 ring-teal-500' : ''}`;
+            cell.className = `min-h-[80px] p-1 calendar-day cursor-pointer transition relative`;
+            cell.style.cssText = isToday 
+                ? 'background:rgba(99,102,241,0.15); border:1px solid rgba(99,102,241,0.4); border-radius:8px;'
+                : 'background:#131825; border:1px solid rgba(255,255,255,0.04); border-radius:8px;';
             cell.dataset.date = dateStr;
 
             const dayNum = document.createElement('div');
-            dayNum.className = `text-xs font-bold mb-1 ${isToday ? 'text-teal-600' : 'text-gray-700'}`;
+            dayNum.className = 'text-xs font-bold mb-1';
+            dayNum.style.color = isToday ? '#818cf8' : '#c4c8d4';
             dayNum.textContent = day;
             cell.appendChild(dayNum);
 
@@ -3585,7 +3590,8 @@ const app = {
         const trailing = (7 - (total % 7)) % 7;
         for (let i = 0; i < trailing; i++) {
             const blank = document.createElement('div');
-            blank.className = 'bg-gray-50 min-h-[80px]';
+            blank.className = 'min-h-[80px]';
+            blank.style.cssText = 'background:rgba(255,255,255,0.02);';
             grid.appendChild(blank);
         }
 
@@ -4386,7 +4392,7 @@ const app = {
 
     async _loadInboxStats() {
         try {
-            const base = (window.CONFIG?.API?.BASE_URL) || 'http://localhost:8003';
+            const base = (window.CONFIG?.API?.BASE_URL) || 'http://localhost:8000';
             const r = await fetch(`${base}/api/v1/inbox/stats`);
             const d = await r.json();
             const s = d?.data || {};
@@ -4404,7 +4410,7 @@ const app = {
 
     async _loadInboxThreads(platform, search) {
         try {
-            const base = (window.CONFIG?.API?.BASE_URL) || 'http://localhost:8003';
+            const base = (window.CONFIG?.API?.BASE_URL) || 'http://localhost:8000';
             let url = `${base}/api/v1/inbox/threads?business_id=demo`;
             if (platform && platform !== 'all') url += `&platform=${platform}`;
             if (search) url += `&search=${encodeURIComponent(search)}`;
@@ -4474,7 +4480,7 @@ const app = {
         panel.innerHTML = '<div class="flex-1 flex items-center justify-center"><i class="fas fa-spinner fa-spin text-lg" style="color:#818cf8;"></i></div>';
 
         try {
-            const base = (window.CONFIG?.API?.BASE_URL) || 'http://localhost:8003';
+            const base = (window.CONFIG?.API?.BASE_URL) || 'http://localhost:8000';
             const r = await fetch(`${base}/api/v1/inbox/threads/${threadId}`);
             const d = await r.json();
             const thread = d?.data || {};
@@ -4563,7 +4569,7 @@ const app = {
         input.value = '';
 
         try {
-            const base = (window.CONFIG?.API?.BASE_URL) || 'http://localhost:8003';
+            const base = (window.CONFIG?.API?.BASE_URL) || 'http://localhost:8000';
             await fetch(`${base}/api/v1/inbox/threads/${threadId}/reply`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -4584,7 +4590,7 @@ const app = {
         el.innerHTML = '<div class="p-3 text-center"><i class="fas fa-brain animate-pulse" style="color:#a78bfa;"></i><p class="text-[10px] mt-1" style="color:#5f6680;">AI generating suggestions...</p></div>';
 
         try {
-            const base = (window.CONFIG?.API?.BASE_URL) || 'http://localhost:8003';
+            const base = (window.CONFIG?.API?.BASE_URL) || 'http://localhost:8000';
             const r = await fetch(`${base}/api/v1/inbox/threads/${threadId}/ai-suggest`, { method: 'POST' });
             const d = await r.json();
             const suggestions = d?.data?.suggestions || [];
@@ -4645,7 +4651,7 @@ const app = {
 
     async toggleThreadFlag(threadId) {
         try {
-            const base = (window.CONFIG?.API?.BASE_URL) || 'http://localhost:8003';
+            const base = (window.CONFIG?.API?.BASE_URL) || 'http://localhost:8000';
             const thread = this._inboxThreads.find(t => t.thread_id === threadId);
             await fetch(`${base}/api/v1/inbox/threads/${threadId}`, {
                 method: 'PATCH',
@@ -4659,7 +4665,7 @@ const app = {
 
     async archiveThread(threadId) {
         try {
-            const base = (window.CONFIG?.API?.BASE_URL) || 'http://localhost:8003';
+            const base = (window.CONFIG?.API?.BASE_URL) || 'http://localhost:8000';
             await fetch(`${base}/api/v1/inbox/threads/${threadId}`, {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' },

@@ -6,7 +6,7 @@ import os
 # Change to the correct directory
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
-PORT = 3000
+PORT = int(os.getenv("PORT", 3000))
 
 class MyHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
     def end_headers(self):

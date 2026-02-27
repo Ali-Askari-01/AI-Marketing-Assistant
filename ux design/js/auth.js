@@ -103,7 +103,7 @@ class AuthManager {
             if (state && state.startsWith('linkedin')) provider = 'linkedin';
 
             // Exchange code via fetch (stays on same origin so localStorage works)
-            var base = (window.CONFIG && window.CONFIG.API && window.CONFIG.API.BASE_URL) || 'http://localhost:8003';
+            var base = (window.CONFIG && window.CONFIG.API && window.CONFIG.API.BASE_URL) || 'http://localhost:8000';
             var self = this;
 
             // Clear URL params immediately
@@ -156,7 +156,7 @@ class AuthManager {
     signInWithGoogle() {
         console.log('Initiating Google OAuth via backend');
         showLoading();
-        var base = (window.CONFIG && window.CONFIG.API && window.CONFIG.API.BASE_URL) || 'http://localhost:8003';
+        var base = (window.CONFIG && window.CONFIG.API && window.CONFIG.API.BASE_URL) || 'http://localhost:8000';
         window.location.href = base + '/api/v1/auth/google/login';
     }
 
@@ -164,7 +164,7 @@ class AuthManager {
     signInWithLinkedIn() {
         console.log('Initiating LinkedIn OAuth via backend');
         showLoading();
-        var base = (window.CONFIG && window.CONFIG.API && window.CONFIG.API.BASE_URL) || 'http://localhost:8003';
+        var base = (window.CONFIG && window.CONFIG.API && window.CONFIG.API.BASE_URL) || 'http://localhost:8000';
         window.location.href = base + '/api/v1/auth/linkedin/login';
     }
 
@@ -172,7 +172,7 @@ class AuthManager {
     signInWithEmail(email, password) {
         showLoading();
         var self = this;
-        var base = (window.CONFIG && window.CONFIG.API && window.CONFIG.API.BASE_URL) || 'http://localhost:8003';
+        var base = (window.CONFIG && window.CONFIG.API && window.CONFIG.API.BASE_URL) || 'http://localhost:8000';
         fetch(base + '/api/v1/auth/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -357,7 +357,7 @@ function signInDemo() {
         };
 
         auth.setAuthData(mockTokenData, demoUser, 'demo');
-        showToast('Demo login successful! Welcome to Marketing Command Center', 'success');
+        showToast('Demo login successful! Welcome to Omni Mind', 'success');
 
         setTimeout(function() {
             window.location.href = 'index.html';
@@ -402,32 +402,48 @@ function handleSignUp(event) {
     var firstName = event.target[0].value;
     var lastName = event.target[1].value;
     var email = event.target[2].value;
+    var password = event.target[3].value;
+    var company = event.target[4].value;
+    var industry = event.target[5].value;
 
-    setTimeout(function() {
-        var newUser = {
-            id: 'user_' + Date.now(),
+    var base = (window.CONFIG && window.CONFIG.API && window.CONFIG.API.BASE_URL) || 'http://localhost:8000';
+
+    fetch(base + '/api/v1/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
             email: email,
+            password: password,
             name: firstName + ' ' + lastName,
-            firstName: firstName,
-            lastName: lastName,
-            picture: 'https://picsum.photos/seed/' + encodeURIComponent(email) + '/200/200.jpg',
-            provider: 'email'
-        };
-
-        var mockTokenData = {
-            access_token: 'new_user_token_' + Date.now(),
-            refresh_token: 'new_user_refresh_' + Date.now()
-        };
-
-        auth.setAuthData(mockTokenData, newUser, 'email');
+            business: { name: company, industry: industry }
+        })
+    })
+    .then(function(response) {
+        if (!response.ok) throw new Error('Registration failed');
+        return response.json();
+    })
+    .then(function(data) {
+        var d = data.data || data;
+        auth.setAuthData(
+            { access_token: d.token || d.access_token, refresh_token: d.refreshToken || d.refresh_token },
+            d.user || { email: email, name: firstName + ' ' + lastName },
+            'email'
+        );
+        if (d.business) {
+            localStorage.setItem('business_profile', JSON.stringify(d.business));
+        }
         hideLoading();
         hideSignUpModal();
         showToast('Account created successfully!', 'success');
-
         setTimeout(function() {
             window.location.href = 'index.html';
-        }, 1500);
-    }, 1500);
+        }, 1000);
+    })
+    .catch(function(error) {
+        console.error('Registration error:', error);
+        hideLoading();
+        showToast('Registration failed. Please try again.', 'error');
+    });
 }
 
 // Export for other files

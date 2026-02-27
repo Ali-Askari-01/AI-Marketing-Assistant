@@ -1,13 +1,20 @@
 /**
- * Frontend Configuration for AI Marketing Command Center
+ * Frontend Configuration for Omni Mind - AI Marketing
  * Contains API endpoints, environment settings, and application constants
  */
+
+// Detect environment: Use Railway URL in production, localhost in development
+const IS_PRODUCTION = window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1';
+
+// ⚠️ IMPORTANT: After deploying to Railway, replace with your actual backend URL
+// Example: 'https://backend-api-production.up.railway.app'
+const RAILWAY_BACKEND_URL = '';  // Set this to your Railway backend URL
 
 // API Configuration
 window.CONFIG = {
     // Backend API Configuration
     API: {
-        BASE_URL: 'http://localhost:8003',
+        BASE_URL: RAILWAY_BACKEND_URL || (IS_PRODUCTION ? '' : 'http://localhost:8000'),
         VERSION: 'v1',
         TIMEOUT: 30000, // 30 seconds
         
@@ -109,7 +116,7 @@ window.CONFIG = {
     
     // Application Settings
     APP: {
-        NAME: 'AI Marketing Command Center',
+        NAME: 'Omni Mind',
         VERSION: '1.0.0',
         DEBUG: true,
         

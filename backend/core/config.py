@@ -11,18 +11,15 @@ class Settings(BaseSettings):
     """Application Settings - Production Ready Configuration"""
     
     # Application Core
-    APP_NAME: str = "AI Marketing Command Center"
+    APP_NAME: str = "Omni Mind"
     APP_VERSION: str = "1.0.0"
     ENVIRONMENT: str = Field(default="development", env="ENVIRONMENT")
     DEBUG: bool = Field(default=False, env="DEBUG")
     LOG_LEVEL: str = Field(default="INFO", env="LOG_LEVEL")
+    PORT: int = Field(default=8000, env="PORT")
+    FRONTEND_URL: str = Field(default="http://localhost:3000", env="FRONTEND_URL")
     
-    # Database Configuration (MongoDB)
-    MONGODB_URL: str = Field(default="mongodb://localhost:27017", env="MONGODB_URL")
-    MONGODB_DATABASE_NAME: str = Field(default="aimarketing", env="MONGODB_DATABASE_NAME")
-    MONGODB_MAX_CONNECTIONS: int = Field(default=10, env="MONGODB_MAX_CONNECTIONS")
-    
-    # Legacy SQLite support (keeping for transition)
+    # Database Configuration (SQLite)
     DATABASE_URL: str = Field(default="sqlite:///./aimarketing.db", env="DATABASE_URL")
     DATABASE_ECHO: bool = Field(default=False, env="DATABASE_ECHO")
     
@@ -64,6 +61,14 @@ class Settings(BaseSettings):
         "http://127.0.0.1:3000",
         "http://127.0.0.1:8000"
     ])
+    
+    @property
+    def get_allowed_origins(self) -> List[str]:
+        """Get CORS allowed origins including FRONTEND_URL"""
+        origins = self.ALLOWED_ORIGINS.copy()
+        if self.FRONTEND_URL and self.FRONTEND_URL not in origins:
+            origins.append(self.FRONTEND_URL)
+        return origins
     
     # Monitoring and Performance
     ENABLE_METRICS: bool = True

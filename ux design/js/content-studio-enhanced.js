@@ -112,7 +112,7 @@ const ContentStudio = {
         try {
             const formData = new FormData();
             formData.append('file', file);
-            const baseUrl = (window.CONFIG?.API?.BASE_URL) || 'http://localhost:8003';
+            const baseUrl = (window.CONFIG?.API?.BASE_URL) || 'http://localhost:8000';
             const resp = await fetch(`${baseUrl}/api/v1/ai/voice-to-campaign`, { method: 'POST', body: formData });
             if (!resp.ok) throw new Error('Transcription failed');
             const result = await resp.json();
@@ -662,7 +662,7 @@ The Team</textarea>
         resultsContainer.innerHTML = `<div class="p-4 text-center"><div class="inline-flex items-center gap-2"><i class="fas fa-brain text-lg animate-pulse" style="color:#818cf8;"></i><span class="text-sm font-medium" style="color:#9aa0b0;">AI is analyzing your content and generating recommendations...</span></div></div>`;
 
         try {
-            const baseUrl = (window.CONFIG?.API?.BASE_URL) || 'http://localhost:8003';
+            const baseUrl = (window.CONFIG?.API?.BASE_URL) || 'http://localhost:8000';
 
             // Fire captions + analysis in parallel
             const [captionsResp, analysisResp] = await Promise.all([
@@ -830,7 +830,7 @@ The Team</textarea>
 
         try {
             const baseUrl = (window.CONFIG && window.CONFIG.API && window.CONFIG.API.BASE_URL)
-                ? window.CONFIG.API.BASE_URL : 'http://localhost:8003';
+                ? window.CONFIG.API.BASE_URL : 'http://localhost:8000';
             const resp = await fetch(`${baseUrl}/api/v1/ai/analyze-post`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },

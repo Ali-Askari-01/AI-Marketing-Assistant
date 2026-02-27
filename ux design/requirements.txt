@@ -1,0 +1,2 @@
+# Frontend static file server - no additional dependencies needed
+# Python's built-in http.server is used via server.py
