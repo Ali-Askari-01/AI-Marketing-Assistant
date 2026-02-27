@@ -27,7 +27,7 @@ class InfrastructureManager {
     loadConfiguration() {
         return {
             api: {
-                baseURL: this.environment.isLocal ? 'http://localhost:8000/api' : 'https://api.aimarketing.ai/api',
+                baseURL: this.environment.isLocal ? 'http://localhost:8000/api' : (window.location.origin + '/api'),
                 timeout: this.environment.isProduction ? 15000 : 30000,
                 retries: 3
             },

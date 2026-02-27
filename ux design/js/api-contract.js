@@ -1,7 +1,7 @@
 // API Contract Integration Layer - Connects frontend to new API contract
 class MarketingAPIContract {
     constructor() {
-        this.baseURL = 'http://localhost:8000/api/v1'; // New API contract endpoints
+        this.baseURL = ((window.CONFIG && window.CONFIG.API && window.CONFIG.API.BASE_URL) || window.location.origin) + '/api/v1';
         this.token = localStorage.getItem('auth_token');
         this.requestId = this.generateRequestId();
     }

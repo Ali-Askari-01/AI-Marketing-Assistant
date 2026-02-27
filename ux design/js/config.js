@@ -14,7 +14,7 @@ const RAILWAY_BACKEND_URL = '';  // Set this to your Railway backend URL
 window.CONFIG = {
     // Backend API Configuration
     API: {
-        BASE_URL: RAILWAY_BACKEND_URL || (IS_PRODUCTION ? '' : 'http://localhost:8000'),
+        BASE_URL: RAILWAY_BACKEND_URL || (IS_PRODUCTION ? window.location.origin : 'http://localhost:8000'),
         VERSION: 'v1',
         TIMEOUT: 30000, // 30 seconds
         
