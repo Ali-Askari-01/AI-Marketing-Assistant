@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Demo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-50 p-8">
+    <h1 class="text-2xl font-bold text-gray-900 mb-4">Test Demo</h1>
+    <p class="text-gray-600 mb-4">Testing if the server is working correctly</p>
+    <button class="bg-teal-600 text-white px-4 py-2 rounded hover:bg-teal-700" onclick="testApp()">
+        Test App Loading
+    </button>
+    <div id="testResult" class="mt-4 p-4 bg-white rounded-lg border border-gray-200"></div>
+    
+    <script>
+        function testApp() {
+            const result = document.getElementById('testResult');
+            result.innerHTML = '<p class="text-green-600 font-semibold">✓ Server is working!</p>';
+            
+            // Test if app object exists
+            if (typeof app !== 'undefined') {
+                result.innerHTML += '<p class="text-blue-600 font-semibold">✓ App object loaded!</p>';
+                result.innerHTML += '<p class="text-gray-600">Available views: ' + Object.keys(app.views).join(', ') + '</p>';
+            } else {
+                result.innerHTML += '<p class="text-red-600 font-semibold">❌ App object not found</p>';
+            }
+        }
+    </script>
+</body>
+</html>

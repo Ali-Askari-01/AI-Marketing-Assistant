@@ -1,0 +1,316 @@
+"""
+Authentication Routes
+Implements the API contract for authentication endpoints
+Updated for MongoDB integration
+"""
+
+from fastapi import APIRouter, HTTPException, Depends, Request
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from typing import Dict, Any, Optional
+from datetime import datetime, timedelta
+import uuid
+
+from contracts.api_contract import (
+    APIContract, ErrorCode, RegisterRequest, LoginRequest, AuthResponse,
+    RequestContext, ValidationRules, get_status_code
+)
+from core.security import security_manager
+from models.mongo_db import user_repo
+from models.mongodb_models import User, UserRole
+from core.config import settings
+
+router = APIRouter(prefix="/api/v1/auth", tags=["authentication"])
+security = HTTPBearer()
+
+@router.post("/register", response_model=Dict[str, Any])
+async def register(request: Request, user_data: RegisterRequest) -> Dict[str, Any]:
+    """Register new user"""
+    request_id = str(uuid.uuid4())
+    context = RequestContext(request_id)
+    
+    try:
+        # Validate request
+        if not ValidationRules.validate_email(user_data.email):
+            raise HTTPException(
+                status_code=400,
+                detail=APIContract.validation_error_response("email", "Invalid email format")
+            )
+        
+        if not ValidationRules.validate_password(user_data.password):
+            raise HTTPException(
+                status_code=400,
+                detail=APIContract.validation_error_response("password", "Password must be at least 8 characters with uppercase, lowercase, and digit")
+            )
+        
+        # Check if user already exists
+        existing_user = await user_repo.get_user_by_email(user_data.email)
+        if existing_user:
+            raise HTTPException(
+                status_code=409,
+                detail=APIContract.error_response(
+                    ErrorCode.EMAIL_ALREADY_EXISTS,
+                    "Email already registered"
+                )
+            )
+        
+        # Create user
+        password_hash = security_manager.hash_password(user_data.password)
+        user_dict = {
+            "email": user_data.email,
+            "password_hash": password_hash,
+            "full_name": user_data.full_name or user_data.email.split("@")[0],
+            "is_active": True,
+            "is_verified": False,
+            "timezone": "UTC",
+            "language": "en",
+            "notifications_enabled": True
+        }
+        
+        user = await user_repo.create_user(user_dict)
+        
+        # Generate tokens
+        token_data = {
+            "sub": str(user.id),
+            "email": user.email,
+            "provider": "email"
+        }
+        
+        access_token = security_manager.create_access_token(token_data)
+        refresh_token = security_manager.create_refresh_token(token_data)
+        
+        response_data = {
+            "user_id": str(user.id),
+            "email": user.email,
+            "full_name": user.full_name,
+            "access_token": access_token,
+            "refresh_token": refresh_token,
+            "expires_in": settings.JWT_ACCESS_TOKEN_EXPIRE_MINUTES * 60
+        }
+        
+        return APIContract.success_response(
+            response_data,
+            meta=context.to_dict()
+        )
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=APIContract.internal_error_response(str(e))
+        )
+
+@router.post("/login", response_model=Dict[str, Any])
+async def login(request: Request, login_data: LoginRequest) -> Dict[str, Any]:
+    """Login user"""
+    request_id = str(uuid.uuid4())
+    context = RequestContext(request_id)
+    
+    try:
+        # Validate request
+        if not ValidationRules.validate_email(login_data.email):
+            raise HTTPException(
+                status_code=400,
+                detail=APIContract.validation_error_response("email", "Invalid email format")
+            )
+        
+        # Get user
+        user = await user_repo.get_user_by_email(login_data.email)
+        if not user:
+            raise HTTPException(
+                status_code=401,
+                detail=APIContract.error_response(
+                    ErrorCode.INVALID_CREDENTIALS,
+                    "Invalid email or password"
+                )
+            )
+        
+        # Check if user is active
+        if not user.is_active:
+            raise HTTPException(
+                status_code=401,
+                detail=APIContract.error_response(
+                    ErrorCode.ACCOUNT_DISABLED,
+                    "Account is disabled"
+                )
+            )
+        
+        # Verify password
+        if not security_manager.verify_password(login_data.password, user.password_hash):
+            raise HTTPException(
+                status_code=401,
+                detail=APIContract.error_response(
+                    ErrorCode.INVALID_CREDENTIALS,
+                    "Invalid email or password"
+                )
+            )
+        
+        # Update last login
+        from datetime import timezone
+        await user_repo.update_user(str(user.id), {
+            "last_login": datetime.now(timezone.utc)
+        })
+        
+        # Generate tokens
+        token_data = {
+            "sub": str(user.id),
+            "email": user.email,
+            "provider": "email"
+        }
+        
+        access_token = security_manager.create_access_token(token_data)
+        refresh_token = security_manager.create_refresh_token(token_data)
+        
+        response_data = {
+            "user_id": str(user.id),
+            "email": user.email,
+            "full_name": user.full_name,
+            "access_token": access_token,
+            "refresh_token": refresh_token,
+            "expires_in": settings.JWT_ACCESS_TOKEN_EXPIRE_MINUTES * 60
+        }
+        
+        return APIContract.success_response(
+            response_data,
+            meta=context.to_dict()
+        )
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=APIContract.internal_error_response(str(e))
+        )
+
+@router.get("/me", response_model=Dict[str, Any])
+async def get_current_user_profile(
+    request: Request,
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+) -> Dict[str, Any]:
+    """Get current user profile"""
+    request_id = str(uuid.uuid4())
+    context = RequestContext(request_id)
+    
+    try:
+        # Verify token
+        payload = security_manager.verify_token(credentials.credentials)
+        context.user_id = payload.get("sub")
+        
+        # Get user
+        user = await user_repo.get_user_by_id(context.user_id)
+        if not user:
+            raise HTTPException(
+                status_code=404,
+                detail=APIContract.error_response(
+                    ErrorCode.NOT_FOUND,
+                    "User not found"
+                )
+            )
+        
+        response_data = {
+            "user_id": str(user.id),
+            "email": user.email,
+            "full_name": user.full_name,
+            "is_verified": user.is_verified,
+            "plan": user.plan,
+            "timezone": user.timezone,
+            "language": user.language,
+            "notifications_enabled": user.notifications_enabled,
+            "created_at": user.created_at.isoformat(),
+            "last_login": user.last_login.isoformat() if user.last_login else None
+        }
+        
+        return APIContract.success_response(
+            response_data,
+            meta=context.to_dict()
+        )
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=APIContract.internal_error_response(str(e))
+        )
+
+@router.post("/refresh", response_model=Dict[str, Any])
+async def refresh_token(
+    request: Request,
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+) -> Dict[str, Any]:
+    """Refresh access token"""
+    request_id = str(uuid.uuid4())
+    context = RequestContext(request_id)
+    
+    try:
+        # Verify token
+        payload = security_manager.verify_token(credentials.credentials)
+        
+        # Check if it's a refresh token
+        if payload.get("type") != "refresh":
+            raise HTTPException(
+                status_code=401,
+                detail=APIContract.error_response(
+                    ErrorCode.INVALID_TOKEN,
+                    "Invalid token type"
+                )
+            )
+        
+        # Generate new access token
+        token_data = {
+            "sub": payload.get("sub"),
+            "email": payload.get("email"),
+            "provider": payload.get("provider")
+        }
+        
+        access_token = security_manager.create_access_token(token_data)
+        refresh_token = security_manager.create_refresh_token(token_data)
+        
+        response_data = {
+            "access_token": access_token,
+            "refresh_token": refresh_token,
+            "expires_in": settings.JWT_ACCESS_TOKEN_EXPIRE_MINUTES * 60
+        }
+        
+        return APIContract.success_response(
+            response_data,
+            meta=context.to_dict()
+        )
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=APIContract.internal_error_response(str(e))
+        )
+
+@router.post("/signout", response_model=Dict[str, Any])
+async def signout(
+    request: Request,
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+) -> Dict[str, Any]:
+    """Sign out user"""
+    request_id = str(uuid.uuid4())
+    context = RequestContext(request_id)
+    
+    try:
+        # Verify token
+        payload = security_manager.verify_token(credentials.credentials)
+        
+        # In a real implementation, you would invalidate the token here
+        # For now, just return success
+        
+        return APIContract.success_response(
+            {"message": "Successfully signed out"},
+            meta=context.to_dict()
+        )
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=APIContract.internal_error_response(str(e))
+        )

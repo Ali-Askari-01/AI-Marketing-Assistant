@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auth Test - AI Marketing Command Center</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-50 p-8">
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-2xl font-bold mb-6">Authentication Test Page</h1>
+        
+        <div class="bg-white rounded-lg shadow p-6 mb-6">
+            <h2 class="text-lg font-semibold mb-4">Test SSO Authentication</h2>
+            
+            <div class="space-y-4">
+                <button onclick="testGoogleAuth()" class="w-full flex items-center justify-center gap-3 px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24">
+                        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                    </svg>
+                    <span>Test Google Sign-In</span>
+                </button>
+                
+                <button onclick="testMicrosoftAuth()" class="w-full flex items-center justify-center gap-3 px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24">
+                        <path fill="#F25022" d="M11.4 11.4H2.6V2.6h8.8v8.8z"/>
+                        <path fill="#7FBA00" d="M21.4 11.4h-8.8V2.6h8.8v8.8z"/>
+                        <path fill="#00A4EF" d="M11.4 21.4H2.6v-8.8h8.8v8.8z"/>
+                        <path fill="#FFB900" d="M21.4 21.4h-8.8v-8.8h8.8v8.8z"/>
+                    </svg>
+                    <span>Test Microsoft Sign-In</span>
+                </button>
+                
+                <button onclick="checkAuthStatus()" class="w-full flex items-center justify-center gap-3 px-4 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
+                    <i class="fas fa-check-circle"></i>
+                    <span>Check Authentication Status</span>
+                </button>
+                
+                <button onclick="clearAuth()" class="w-full flex items-center justify-center gap-3 px-4 py-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors">
+                    <i class="fas fa-trash"></i>
+                    <span>Clear Authentication Data</span>
+                </button>
+            </div>
+        </div>
+        
+        <div class="bg-white rounded-lg shadow p-6">
+            <h2 class="text-lg font-semibold mb-4">Authentication Status</h2>
+            <div id="authStatus" class="space-y-2">
+                <p class="text-gray-600">Click "Check Authentication Status" to see current state</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center">
+        <div class="bg-white rounded-xl p-6 flex flex-col items-center gap-4">
+            <div class="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+            <p class="text-gray-700 font-medium">Testing authentication...</p>
+        </div>
+    </div>
+    
+    <!-- Toast Notification -->
+    <div id="toast" class="hidden fixed bottom-4 right-4 bg-white rounded-lg shadow-lg p-4 flex items-center gap-3 min-w-[300px] z-50">
+        <div id="toastIcon"></div>
+        <div class="flex-1">
+            <p id="toastMessage" class="text-sm font-medium text-gray-900"></p>
+        </div>
+        <button onclick="hideToast()" class="text-gray-400 hover:text-gray-600">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+    
+    <script src="js/auth.js"></script>
+    <script>
+        function testGoogleAuth() {
+            console.log('Testing Google authentication...');
+            signInWithGoogle();
+        }
+        
+        function testMicrosoftAuth() {
+            console.log('Testing Microsoft authentication...');
+            signInWithMicrosoft();
+        }
+        
+        function checkAuthStatus() {
+            const isAuthenticated = auth.isAuthenticated();
+            const user = auth.getCurrentUser();
+            const token = auth.getToken();
+            
+            const statusDiv = document.getElementById('authStatus');
+            statusDiv.innerHTML = `
+                <div class="space-y-3">
+                    <div class="flex items-center gap-2">
+                        <span class="font-semibold">Authenticated:</span>
+                        <span class="${isAuthenticated ? 'text-green-600' : 'text-red-600'}">${isAuthenticated ? 'Yes' : 'No'}</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="font-semibold">Has Token:</span>
+                        <span class="${token ? 'text-green-600' : 'text-red-600'}">${token ? 'Yes' : 'No'}</span>
+                    </div>
+                    ${user ? `
+                        <div class="border-t pt-3">
+                            <h3 class="font-semibold mb-2">User Info:</h3>
+                            <div class="bg-gray-50 p-3 rounded text-sm">
+                                <p><strong>Name:</strong> ${user.name}</p>
+                                <p><strong>Email:</strong> ${user.email}</p>
+                                <p><strong>Provider:</strong> ${user.provider}</p>
+                                <p><strong>User ID:</strong> ${user.id}</p>
+                                <p><strong>Last Login:</strong> ${new Date(user.lastLogin).toLocaleString()}</p>
+                            </div>
+                        </div>
+                    ` : ''}
+                    <div class="border-t pt-3">
+                        <h3 class="font-semibold mb-2">LocalStorage:</h3>
+                        <div class="bg-gray-50 p-3 rounded text-sm">
+                            <p><strong>auth_token:</strong> ${localStorage.getItem('auth_token') ? 'Present' : 'Not found'}</p>
+                            <p><strong>user_info:</strong> ${localStorage.getItem('user_info') ? 'Present' : 'Not found'}</p>
+                            <p><strong>refresh_token:</strong> ${localStorage.getItem('refresh_token') ? 'Present' : 'Not found'}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function clearAuth() {
+            localStorage.removeItem('auth_token');
+            localStorage.removeItem('user_info');
+            localStorage.removeItem('refresh_token');
+            auth.token = null;
+            auth.user = null;
+            checkAuthStatus();
+            showToast('Authentication data cleared', 'success');
+        }
+        
+        // Helper functions
+        function showLoading() {
+            document.getElementById('loadingOverlay').classList.remove('hidden');
+        }
+        
+        function hideLoading() {
+            document.getElementById('loadingOverlay').classList.add('hidden');
+        }
+        
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            const toastIcon = document.getElementById('toastIcon');
+            
+            toastMessage.textContent = message;
+            
+            if (type === 'success') {
+                toastIcon.innerHTML = '<i class="fas fa-check-circle text-green-500"></i>';
+            } else if (type === 'error') {
+                toastIcon.innerHTML = '<i class="fas fa-exclamation-circle text-red-500"></i>';
+            } else {
+                toastIcon.innerHTML = '<i class="fas fa-info-circle text-blue-500"></i>';
+            }
+            
+            toast.classList.remove('hidden');
+            
+            setTimeout(() => {
+                hideToast();
+            }, 3000);
+        }
+        
+        function hideToast() {
+            document.getElementById('toast').classList.add('hidden');
+        }
+        
+        // Check status on page load
+        window.addEventListener('load', checkAuthStatus);
+    </script>
+</body>
+</html>

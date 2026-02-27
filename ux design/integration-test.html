@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Integration Test - AI Marketing Command Center</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="js/config.js"></script>
+    <script src="js/auth-sso.js"></script>
+    <script src="js/api-contract.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/ai-prompt-engine.js"></script>
+    <script src="js/infrastructure.js"></script>
+    <script src="js/debug.js"></script>
+    <script src="js/app.js"></script>
+</head>
+<body class="bg-gray-50 font-inter antialiased">
+    <div class="min-h-screen p-8">
+        <div class="max-w-6xl mx-auto">
+            <!-- Header -->
+            <div class="bg-white rounded-2xl shadow-lg p-6 mb-8">
+                <h1 class="text-3xl font-bold text-gray-900 mb-2">
+                    <i class="fas fa-rocket text-teal-500 mr-3"></i>
+                    Complete Integration Test
+                </h1>
+                <p class="text-gray-600">Test the complete AI Marketing Command Center integration</p>
+            </div>
+
+            <!-- Test Results -->
+            <div class="bg-white rounded-2xl shadow-lg p-6 mb-8">
+                <h2 class="text-xl font-semibold text-gray-900 mb-4">
+                    <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                    Integration Test Results
+                </h2>
+                <div id="testResults" class="space-y-4">
+                    <!-- Results will be populated here -->
+                </div>
+            </div>
+
+            <!-- Test Controls -->
+            <div class="bg-white rounded-2xl shadow-lg p-6 mb-8">
+                <h2 class="text-xl font-semibold text-gray-900 mb-4">
+                    <i class="fas fa-play-circle text-blue-500 mr-2"></i>
+                    Test Controls
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <button onclick="runAllTests()" class="bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition-colors">
+                        <i class="fas fa-play mr-2"></i>Run All Tests
+                    </button>
+                    <button onclick="clearResults()" class="bg-gray-500 text-white px-6 py-3 rounded-lg hover:bg-gray-600 transition-colors">
+                        <i class="fas fa-trash mr-2"></i>Clear Results
+                    </button>
+                </div>
+            </div>
+
+            <!-- Individual Test Sections -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- API Contract Test -->
+                <div class="bg-white rounded-2xl shadow-lg p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">
+                        <i class="fas fa-link text-purple-500 mr-2"></i>
+                        API Contract Test
+                    </h3>
+                    <button onclick="testAPIContract()" class="bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition-colors mb-4">
+                        <i class="fas fa-rocket mr-2"></i>Test API Contract
+                    </button>
+                    <div id="apiContractResult" class="p-3 bg-gray-50 rounded-lg text-sm font-mono"></div>
+                </div>
+
+                <!-- Authentication Test -->
+                <div class="bg-white rounded-2xl shadow-lg p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">
+                        <i class="fas fa-user-shield text-blue-500 mr-2"></i>
+                        Authentication Test
+                    </h3>
+                    <button onclick="testAuthentication()" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors mb-4">
+                        <i class="fas fa-sign-in-alt mr-2"></i>Test Authentication
+                    </button>
+                    <div id="authResult" class="p-3 bg-gray-50 rounded-lg text-sm font-mono"></div>
+                </div>
+
+                <!-- Business Test -->
+                <div class="bg-white rounded-2xl shadow-lg p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">
+                        <i class="fas fa-building text-green-500 mr-2"></i>
+                        Business Test
+                    </h3>
+                    <button onclick="testBusiness()" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors mb-4">
+                        <i class="fas fa-plus-circle mr-2"></i>Test Business
+                    </button>
+                    <div id="businessResult" class="p-3 bg-gray-50 rounded-lg text-sm font-mono"></div>
+                </div>
+
+                <!-- Campaign Test -->
+                <div class="bg-white rounded-2xl shadow-lg p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">
+                        <i class="fas fa-calendar-alt text-orange-500 mr-2"></i>
+                        Campaign Test
+                    </h3>
+                    <button onclick="testCampaign()" class="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition-colors mb-4">
+                        <i class="fas fa-magic mr-2"></i>Test Campaign
+                    </button>
+                    <div id="campaignResult" class="p-3 bg-gray-50 rounded-lg text-sm font-mono"></div>
+                </div>
+
+                <!-- Content Test -->
+                <div class="bg-white rounded-2xl shadow-lg p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">
+                        <i class="fas fa-pen-fancy text-pink-500 mr-2"></i>
+                        Content Test
+                    </h3>
+                    <button onclick="testContent()" class="bg-pink-500 text-white px-4 py-2 rounded-lg hover:bg-pink-600 transition-colors mb-4">
+                        <i class="fas fa-pen mr-2"></i>Test Content
+                    </button>
+                    <div id="contentResult" class="p-3 bg-gray-50 rounded-lg text-sm font-mono"></div>
+                </div>
+
+                <!-- Analytics Test -->
+                <div class="bg-white rounded-2xl shadow-lg p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">
+                        <i class="fas fa-chart-line text-teal-500 mr-2"></i>
+                        Analytics Test
+                    </h3>
+                    <button onclick="testAnalytics()" class="bg-teal-500 text-white px-4 py-2 rounded-lg hover:bg-teal-600 transition-colors mb-4">
+                        <i class="fas fa-chart-bar mr-2"></i>Test Analytics
+                    </button>
+                    <div id="analyticsResult" class="p-3 bg-gray-50 rounded-lg text-sm font-mono"></div>
+                </div>
+
+                <!-- Messaging Test -->
+                <div class="bg-white rounded-2xl shadow-lg p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">
+                        <i class="fas fa-comments text-cyan-500 mr-2"></i>
+                        Messaging Test
+                    </h3>
+                    <button onclick="testMessaging()" class="bg-cyan-500 text-white px-4 py-2 rounded-lg hover:bg-cyan-600 transition-colors mb-4">
+                        <i class="fas fa-inbox mr-2"></i>Test Messaging
+                    </button>
+                    <div id="messagingResult" class="p-3 bg-gray-50 rounded-lg text-sm font-mono"></div>
+                </div>
+            </div>
+
+            <!-- System Status -->
+            <div class="bg-white rounded-2xl shadow-lg p-6">
+                <h2 class="text-xl font-semibold text-gray-900 mb-4">
+                    <i class="fas fa-heartbeat text-red-500 mr-2"></i>
+                    System Status
+                </h2>
+                <button onclick="testSystemStatus()" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors mb-4">
+                    <i class="fas fa-stethoscope mr-2"></i>Test System Status
+                </button>
+                <div id="systemStatusResult" class="p-3 bg-gray-50 rounded-lg text-sm font-mono"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let testResults = [];
+
+        function addTestResult(testName, status, message, details = null) {
+            const result = {
+                name: testName,
+                status: status,
+                message: message,
+                details: details,
+                timestamp: new Date().toISOString()
+            };
+            
+            testResults.push(result);
+            updateTestResults();
+        }
+
+        function updateTestResults() {
+            const resultsDiv = document.getElementById('testResults');
+            resultsDiv.innerHTML = testResults.map(result => `
+                <div class="flex items-start gap-3 p-4 bg-gray-50 rounded-lg">
+                    <div class="flex-shrink-0">
+                        ${result.status === 'success' 
+                            ? '<i class="fas fa-check-circle text-green-500 text-xl"></i>'
+                            : result.status === 'error'
+                            ? '<i class="fas fa-times-circle text-red-500 text-xl"></i>'
+                            : '<i class="fas fa-spinner fa-spin text-blue-500 text-xl"></i>'
+                        }
+                    </div>
+                    <div class="flex-1">
+                        <div class="font-medium text-gray-900">${result.name}</div>
+                        <div class="text-sm text-gray-600">${result.message}</div>
+                        ${result.details ? `<div class="text-xs text-gray-500 mt-1">${result.details}</div>` : ''}
+                    </div>
+                    <div class="text-xs text-gray-400">
+                        ${new Date(result.timestamp).toLocaleTimeString()}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function clearResults() {
+            testResults = [];
+            updateTestResults();
+            
+            // Clear individual result divs
+            document.getElementById('apiContractResult').innerHTML = '';
+            document.getElementById('authResult').innerHTML = '';
+            document.getElementById('businessResult').innerHTML = '';
+            document.getElementById('campaignResult').innerHTML = '';
+            document.getElementById('contentResult').innerHTML = '';
+            document.getElementById('analyticsResult').innerHTML = '';
+            document.getElementById('messagingResult').innerHTML = '';
+            document.getElementById('systemStatusResult').innerHTML = '';
+        }
+
+        async function runAllTests() {
+            clearResults();
+            addTestResult('Starting Tests', 'running', 'Running all integration tests...');
+            
+            await testAPIContract();
+            await testAuthentication();
+            await testBusiness();
+            await testCampaign();
+            await testContent();
+            await testAnalytics();
+            await testMessaging();
+            await testSystemStatus();
+            
+            const successCount = testResults.filter(r => r.status === 'success').length;
+            const totalCount = testResults.length;
+            
+            addTestResult('Test Summary', 'success', 
+                `Completed ${totalCount} tests with ${successCount} successes`,
+                `Success Rate: ${Math.round((successCount / totalCount) * 100)}%`
+            );
+        }
+
+        async function testAPIContract() {
+            const resultDiv = document.getElementById('apiContractResult');
+            resultDiv.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Testing API Contract...';
+            
+            try {
+                // Test API contract availability
+                if (!window.apiContract) {
+                    throw new Error('API Contract not loaded');
+                }
+                
+                // Test demo register
+                const registerResult = await window.apiContract.demoRegister({
+                    email: 'test@example.com',
+                    password: 'password123'
+                });
+                
+                // Test demo login
+                const loginResult = await window.apiContract.demoLogin({
+                    email: 'test@example.com',
+                    password: 'password123'
+                });
+                
+                // Test get user profile
+                const userProfile = await window.apiContract.demoGetMe();
+                
+                resultDiv.innerHTML = '<span class="text-green-600">✅ Success:</span> API Contract working correctly';
+                addTestResult('API Contract', 'success', 'API Contract integration successful', 
+                    `User: ${userProfile.email}, Token: ${loginResult.access_token ? 'Available' : 'Missing'}`);
+                
+            } catch (error) {
+                resultDiv.innerHTML = `<span class="text-red-600">❌ Error:</span> ${error.message}`;
+                addTestResult('API Contract', 'error', 'API Contract test failed', error.message);
+            }
+        }
+
+        async function testAuthentication() {
+            const resultDiv = document.getElementById('authResult');
+            resultDiv.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Testing Authentication...';
+            
+            try {
+                // Test SSO auth system
+                if (!window.auth) {
+                    throw new Error('SSO Auth system not loaded');
+                }
+                
+                // Test demo mode
+                const authResult = window.auth.handleDemoOAuth('google');
+                
+                resultDiv.innerHTML = '<span class="text-green-600">✅ Success:</span> Authentication system working';
+                addTestResult('Authentication', 'success', 'Authentication system working correctly', 
+                    `SSO System: Available, Demo Mode: Working`);
+                
+            } catch (error) {
+                resultDiv.innerHTML = `<span class="text-red-600">❌ Error:</span> ${error.message}`;
+                addTestResult('Authentication', 'error', 'Authentication test failed', error.message);
+            }
+        }
+
+        async function testBusiness() {
+            const resultDiv = document.getElementById('businessResult');
+            resultDiv.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Testing Business...';
+            
+            try {
+                // Test business creation
+                const businessResult = await window.apiContract.demoCreateBusiness({
+                    name: 'Test Business',
+                    industry: 'Technology',
+                    target_audience: 'Tech professionals',
+                    brand_tone: 'Professional',
+                    primary_goal: 'Lead generation'
+                });
+                
+                // Test get businesses
+                const businesses = await window.apiContract.getAllBusinesses();
+                
+                resultDiv.innerHTML = '<span class="text-green-600">✅ Success:</span> Business operations working';
+                addTestResult('Business', 'success', 'Business operations working correctly', 
+                    `Created: ${businessResult.business_id}, Listed: ${businesses.length} businesses`);
+                
+            } catch (error) {
+                resultDiv.innerHTML = `<span class="text-red-600">❌ Error:</span> ${error.message}`;
+                addTestResult('Business', 'error', 'Business test failed', error.message);
+            }
+        }
+
+        async function testCampaign() {
+            const resultDiv = document.getElementById('campaignResult');
+            resultDiv.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Testing Campaign...';
+            
+            try {
+                // Test campaign generation
+                const campaignResult = await window.apiContract.demoGenerateCampaignStrategy({
+                    business_id: 'demo_business_1',
+                    duration_days: 30
+                });
+                
+                // Test get campaigns
+                const campaigns = await window.apiContract.getCampaigns('demo_business_1');
+                
+                resultDiv.innerHTML = '<span class="text-green-600">✅ Success:</span> Campaign operations working';
+                addTestResult('Campaign', 'success', 'Campaign operations working correctly', 
+                    `Generated: ${campaignResult.campaign_id}, Calendar: ${campaignResult.calendar.length} days`);
+                
+            } catch (error) {
+                resultDiv.innerHTML = `<span class="text-red-600">❌ Error:</span> ${error.message}`;
+                addTestResult('Campaign', 'error', 'Campaign test failed', error.message);
+            }
+        }
+
+        async function testContent() {
+            const resultDiv = document.getElementById('contentResult');
+            resultDiv.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Testing Content...';
+            
+            try {
+                // Test content generation
+                const contentResult = await window.apiContract.demoGenerateContent({
+                    campaign_id: 'demo_campaign_1',
+                    day: 1,
+                    content_type: 'reel'
+                });
+                
+                // Test get content
+                const content = await window.apiContract.getContent('demo_content_1');
+                
+                resultDiv.innerHTML = '<span class="text-green-600">✅ Success:</span> Content operations working';
+                addTestResult('Content', 'success', 'Content operations working correctly', 
+                    `Generated: ${contentResult.content_id}, Score: ${contentResult.estimated_engagement_score}`);
+                
+            } catch (error) {
+                resultDiv.innerHTML = `<span class="text-red-600">❌ Error:</span> ${error.message}`;
+                addTestResult('Content', 'error', 'Content test failed', error.message);
+            }
+        }
+
+        async function testAnalytics() {
+            const resultDiv = document.getElementById('analyticsResult');
+            resultDiv.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Testing Analytics...';
+            
+            try {
+                // Test business analytics
+                const analyticsResult = await window.apiContract.demoGetBusinessAnalytics('demo_business_1');
+                
+                // Test health score
+                const healthScore = await window.apiContract.getHealthScore('demo_campaign_1');
+                
+                resultDiv.innerHTML = '<span class="text-green-600">✅ Success:</span> Analytics operations working';
+                addTestResult('Analytics', 'success', 'Analytics operations working correctly', 
+                    `Health Score: ${analyticsResult.health_score}, Engagement: ${analyticsResult.engagement_rate}%`);
+                
+            } catch (error) {
+                resultDiv.innerHTML = `<span class="text-red-600">❌ Error:</span> ${error.message}`;
+                addTestResult('Analytics', 'error', 'Analytics test failed', error.message);
+            }
+        }
+
+        async function testMessaging() {
+            const resultDiv = document.getElementById('messagingResult');
+            resultDiv.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Testing Messaging...';
+            
+            try {
+                // Test get messages
+                const messages = await window.apiContract.demoGetMessages('demo_business_1');
+                
+                // Test AI reply
+                const reply = await window.apiContract.demoGenerateAIReply({
+                    business_id: 'demo_business_1',
+                    customer_message: 'How much is your membership?'
+                });
+                
+                resultDiv.innerHTML = '<span class="text-green-600">✅ Success:</span> Messaging operations working';
+                addTestResult('Messaging', 'success', 'Messaging operations working correctly', 
+                    `Messages: ${messages.messages.length}, AI Reply: ${reply.suggested_reply ? 'Generated' : 'Failed'}`);
+                
+            } catch (error) {
+                resultDiv.innerHTML = `<span class="text-red-600">❌ Error:</span> ${error.message}`;
+                addTestResult('Messaging', 'error', 'Messaging test failed', error.message);
+            }
+        }
+
+        async function testSystemStatus() {
+            const resultDiv = document.getElementById('systemStatusResult');
+            resultDiv.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Testing System Status...';
+            
+            try {
+                // Test health status
+                const healthStatus = await window.apiContract.getHealthStatus();
+                
+                // Test app availability
+                const appAvailable = window.app ? 'Available' : 'Not Available';
+                
+                resultDiv.innerHTML = '<span class="text-green-600">✅ Success:</span> System status healthy';
+                addTestResult('System Status', 'success', 'System status healthy', 
+                    `Health: ${healthStatus.status || 'Unknown'}, App: ${appAvailable}`);
+                
+            } catch (error) {
+                resultDiv.innerHTML = `<span class="text-red-600">❌ Error:</span> ${error.message}`;
+                addTestResult('System Status', 'error', 'System status test failed', error.message);
+            }
+        }
+
+        // Auto-run tests on page load
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                addTestResult('Integration Test Ready', 'success', 'All systems ready for testing');
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

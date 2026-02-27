@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Marketing Command Center</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+    <script src="js/config.js?v=2"></script>
+    <script src="js/auth-sso.js?v=2"></script>
+    <script src="js/api-contract.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/ai-prompt-engine.js"></script>
+    <script src="js/ai-service.js"></script>
+    <script src="js/content-studio-enhanced.js"></script>
+    <script src="js/analytics-dashboard.js"></script>
+    <script src="js/infrastructure.js"></script>
+    <script src="js/debug.js"></script>
+</head>
+<body class="font-inter antialiased" style="background:#0a0e17; color:#e8eaed;">
+    
+    <!-- Floating AI Assistant Button -->
+    <button class="ai-fab" id="aiFab" onclick="AIChatPanel.toggle()" title="AI Strategist">
+        <i class="fas fa-brain"></i>
+        <span class="ai-fab-dot"></span>
+    </button>
+
+    <!-- Command Palette (Ctrl/Cmd+K) -->
+    <div id="commandPalette" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-md">
+        <div class="flex items-start justify-center min-h-screen pt-20">
+            <div class="command-palette-inner rounded-2xl shadow-2xl w-full max-w-2xl mx-4 overflow-hidden" style="background:#131825; border:1px solid rgba(99,102,241,0.15);">
+                <div class="p-4" style="border-bottom:1px solid rgba(255,255,255,0.06);">
+                    <div class="flex items-center gap-3">
+                        <i class="fas fa-search" style="color:#5f6680;"></i>
+                        <input type="text" id="commandInput" placeholder="Type a command or search..." 
+                            class="flex-1 outline-none text-lg" style="background:transparent; color:#e8eaed; border:none;">
+                        <kbd class="px-2 py-1 text-xs rounded" style="background:rgba(255,255,255,0.06); color:#5f6680;">ESC</kbd>
+                    </div>
+                </div>
+                <div id="commandResults" class="max-h-96 overflow-y-auto p-2">
+                    <div class="command-item" data-action="new-campaign">
+                        <i class="fas fa-plus-circle text-teal-500"></i>
+                        <span>Create new campaign</span>
+                    </div>
+                    <div class="command-item" data-action="generate-post">
+                        <i class="fas fa-magic text-purple-500"></i>
+                        <span>Generate post</span>
+                    </div>
+                    <div class="command-item" data-action="view-analytics">
+                        <i class="fas fa-chart-line text-blue-500"></i>
+                        <span>View analytics</span>
+                    </div>
+                    <div class="command-item" data-action="open-inbox">
+                        <i class="fas fa-inbox text-orange-500"></i>
+                        <span>Open inbox</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobileMenuOverlay" class="hidden fixed inset-0 z-40 bg-black/50 backdrop-blur-sm lg:hidden"></div>
+
+    <!-- Main Layout -->
+    <div class="flex h-screen overflow-hidden">
+        
+        <!-- Left Sidebar Navigation -->
+        <aside id="sidebar" class="fixed lg:static inset-y-0 left-0 z-40 w-64 flex flex-col transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out" style="background:linear-gradient(180deg, #0f1419 0%, #0a0e17 100%); border-right:1px solid rgba(255,255,255,0.06);">
+            <div class="p-6" style="border-bottom:1px solid rgba(255,255,255,0.06);">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl flex items-center justify-center logo-breathe" style="background:linear-gradient(135deg, #6366f1, #06b6d4);">
+                        <i class="fas fa-brain text-white text-lg"></i>
+                    </div>
+                    <div>
+                        <h1 class="font-bold text-lg" style="color:#ffffff;">Command Center</h1>
+                        <p class="text-xs" style="color:#5f6680;">AI Marketing</p>
+                    </div>
+                </div>
+            </div>
+            
+            <nav class="flex-1 p-4 overflow-y-auto">
+                <div class="space-y-1">
+                    <a href="#" class="nav-item active" data-view="home">
+                        <i class="fas fa-home"></i>
+                        <span>Home</span>
+                    </a>
+                    <a href="#" class="nav-item" data-view="strategy">
+                        <i class="fas fa-lightbulb"></i>
+                        <span>Strategy</span>
+                    </a>
+                    <a href="#" class="nav-item" data-view="content">
+                        <i class="fas fa-pen-fancy"></i>
+                        <span>Content Studio</span>
+                    </a>
+                    <a href="#" class="nav-item" data-view="calendar">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span>Calendar</span>
+                    </a>
+                    <a href="#" class="nav-item" data-view="analytics">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>Analytics</span>
+                    </a>
+                    <a href="#" class="nav-item" data-view="inbox">
+                        <i class="fas fa-inbox"></i>
+                        <span>Inbox</span>
+                        <span class="badge">3</span>
+                    </a>
+                    <a href="#" class="nav-item" data-view="settings">
+                        <i class="fas fa-cog"></i>
+                        <span>Settings</span>
+                    </a>
+                    <a href="#" class="nav-item" onclick="event.preventDefault(); app.showHelp();">
+                        <i class="fas fa-question-circle"></i>
+                        <span>Help & Guide</span>
+                    </a>
+                </div>
+            </nav>
+            
+            <div class="p-4" style="border-top:1px solid rgba(255,255,255,0.06);">
+                <div class="flex items-center gap-3">
+                    <div id="sidebarAvatar" class="w-10 h-10 rounded-full flex items-center justify-center text-white font-semibold text-sm" style="background:linear-gradient(135deg, #8b5cf6, #ec4899);">
+                        ..
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p id="sidebarName" class="text-sm font-semibold truncate" style="color:#e8eaed;">Loading...</p>
+                        <p id="sidebarEmail" class="text-xs truncate" style="color:#5f6680;"></p>
+                    </div>
+                    <button onclick="app.signOut()" class="p-2 rounded-lg transition-colors" style="color:#5f6680;" title="Sign Out">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 overflow-hidden flex flex-col">
+            
+            <!-- Top Bar -->
+            <header class="px-4 md:px-8 py-4" style="background:#0f1419; border-bottom:1px solid rgba(255,255,255,0.06);">
+                <div class="flex items-center justify-between">
+                    <!-- Mobile Menu Toggle -->
+                    <button id="mobileMenuToggle" class="icon-btn lg:hidden mr-2">
+                        <i class="fas fa-bars"></i>
+                    </button>
+
+                    <div class="flex items-center gap-2 md:gap-4 flex-1">
+                        <button id="searchBtn" class="search-trigger">
+                            <i class="fas fa-search text-gray-400"></i>
+                            <span class="text-gray-500 hidden sm:inline">Search or type command...</span>
+                            <kbd class="hidden md:inline">⌘K</kbd>
+                        </button>
+                        
+                        <!-- Demo Mode Indicator -->
+                        <div data-demo-indicator class="hidden items-center gap-2 px-3 py-1 rounded-full text-sm" style="background:rgba(245,158,11,0.1); color:#fbbf24; border:1px solid rgba(245,158,11,0.2);">
+                            <i class="fas fa-flask"></i>
+                            <span>Demo Mode</span>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center gap-2 md:gap-4">
+                        <button class="icon-btn" id="headerPlusBtn" onclick="app.showQuickCreate()" title="Create New">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                        <button class="icon-btn relative" id="headerBellBtn" onclick="app.showNotificationPanel()" title="Notifications">
+                            <i class="fas fa-bell"></i>
+                            <span class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full badge-bounce" id="notifBadge"></span>
+                        </button>
+                        <button class="icon-btn" id="headerHelpBtn" onclick="app.showHelp()" title="Help & Guide">
+                            <i class="fas fa-question-circle"></i>
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <!-- View Container -->
+            <div id="viewContainer" class="flex-1 overflow-y-auto">
+                <!-- Views will be dynamically loaded here -->
+            </div>
+        </main>
+    </div>
+
+    <script src="js/config.js?v=2"></script>
+    <script src="js/auth-sso.js?v=2"></script>
+    <script src="js/api-contract.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/ai-prompt-engine.js"></script>
+    <script src="js/ai-service.js"></script>
+    <script src="js/content-studio-enhanced.js"></script>
+    <script src="js/analytics-dashboard.js"></script>
+    <script src="js/ai-chat-panel.js"></script>
+    <script src="js/social-publisher.js"></script>
+    <script src="js/infrastructure.js"></script>
+    <script src="js/debug.js"></script>
+    <script src="js/auth.js?v=2"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

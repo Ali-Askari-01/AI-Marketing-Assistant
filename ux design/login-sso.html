@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - AI Marketing Command Center</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0e17;
+        }
+        .gradient-bg {
+            background: radial-gradient(ellipse at top, #131825 0%, #0a0e17 60%);
+        }
+        .glass-effect {
+            background: rgba(19, 24, 37, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(99, 102, 241, 0.15);
+            box-shadow: 0 25px 60px rgba(0,0,0,0.5), 0 0 40px rgba(99,102,241,0.05);
+        }
+        .provider-button {
+            transition: all 0.3s ease;
+            background: rgba(255,255,255,0.04) !important;
+            border-color: rgba(255,255,255,0.1) !important;
+            color: #e8eaed !important;
+        }
+        .provider-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.2);
+            background: rgba(99,102,241,0.1) !important;
+            border-color: rgba(99,102,241,0.3) !important;
+        }
+        .loading-spinner {
+            border: 3px solid rgba(255,255,255,0.1);
+            border-top: 3px solid #6366f1;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        input[type="email"], input[type="password"] {
+            background: rgba(255,255,255,0.05) !important;
+            border-color: rgba(255,255,255,0.1) !important;
+            color: #e8eaed !important;
+        }
+        input[type="email"]:focus, input[type="password"]:focus {
+            border-color: #6366f1 !important;
+            box-shadow: 0 0 0 3px rgba(99,102,241,0.15) !important;
+        }
+        input[type="email"]::placeholder, input[type="password"]::placeholder {
+            color: rgba(255,255,255,0.3) !important;
+        }
+    </style>
+</head>
+<body class="min-h-screen gradient-bg flex items-center justify-center">
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+        <div class="text-white text-center">
+            <div class="loading-spinner mx-auto mb-4"></div>
+            <p>Loading...</p>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="w-full max-w-6xl mx-auto p-4">
+        <div class="glass-effect rounded-2xl shadow-2xl overflow-hidden">
+            <div class="grid md:grid-cols-2 gap-0">
+                <!-- Left Side - Branding -->
+                <div style="background: linear-gradient(135deg, #0f1419 0%, #131825 50%, #1a1040 100%); position: relative; overflow: hidden;" class="p-8 text-white">
+                    <div style="position:absolute;top:20%;left:30%;width:300px;height:300px;background:radial-gradient(circle,rgba(99,102,241,0.15),transparent 70%);pointer-events:none;"></div>
+                    <div style="position:absolute;bottom:10%;right:20%;width:200px;height:200px;background:radial-gradient(circle,rgba(6,182,212,0.1),transparent 70%);pointer-events:none;"></div>
+                    <div class="h-full flex flex-col justify-center relative z-10">
+                        <div class="mb-8">
+                            <h1 class="text-4xl font-bold mb-4" style="background: linear-gradient(135deg, #e8eaed, #a5b4fc, #06b6d4); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">AI Marketing Command Center</h1>
+                            <p class="text-lg" style="color: rgba(255,255,255,0.7);">Your complete marketing platform powered by artificial intelligence</p>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <div class="flex items-center space-x-3">
+                                <div style="width:40px;height:40px;border-radius:10px;background:rgba(99,102,241,0.15);display:flex;align-items:center;justify-content:center;"><i class="fas fa-rocket" style="color:#818cf8;"></i></div>
+                                <div>
+                                    <h3 class="font-semibold" style="color:#e8eaed;">AI-Powered Strategy</h3>
+                                    <p class="text-sm" style="color:rgba(255,255,255,0.5);">Intelligent campaign planning</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <div style="width:40px;height:40px;border-radius:10px;background:rgba(139,92,246,0.15);display:flex;align-items:center;justify-content:center;"><i class="fas fa-pen-fancy" style="color:#a78bfa;"></i></div>
+                                <div>
+                                    <h3 class="font-semibold" style="color:#e8eaed;">Content Creation</h3>
+                                    <p class="text-sm" style="color:rgba(255,255,255,0.5);">Automated content generation</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <div style="width:40px;height:40px;border-radius:10px;background:rgba(6,182,212,0.15);display:flex;align-items:center;justify-content:center;"><i class="fas fa-chart-line" style="color:#22d3ee;"></i></div>
+                                <div>
+                                    <h3 class="font-semibold" style="color:#e8eaed;">Analytics & Insights</h3>
+                                    <p class="text-sm" style="color:rgba(255,255,255,0.5);">Data-driven optimization</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-8 pt-8" style="border-top: 1px solid rgba(255,255,255,0.08);">
+                            <p class="text-sm" style="color:rgba(255,255,255,0.4);">Join thousands of marketers using AI to grow their business</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Side - Login Form -->
+                <div class="p-8" style="background: #0f1419;">
+                    <div class="max-w-sm mx-auto w-full">
+                        <div class="text-center mb-8">
+                            <h2 class="text-3xl font-bold mb-2" style="color:#e8eaed;">Welcome Back</h2>
+                            <p style="color:rgba(255,255,255,0.5);">Sign in to access your AI marketing dashboard</p>
+                        </div>
+
+                        <!-- SSO Buttons -->
+                        <div class="space-y-3 mb-6">
+                            <button onclick="auth.initiateOAuth('google')" class="provider-button w-full flex items-center justify-center px-4 py-3 border rounded-lg shadow-sm text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" style="background:rgba(255,255,255,0.04); border-color:rgba(255,255,255,0.1); color:#e8eaed;">
+                                <svg class="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25-.07-1.06-.38-2.17-.88-3.25-1.5a9.678 9.678 0 0 0-4.95-4.95l-2.88-2.88a9.678 9.678 0 0 0-4.95 4.95c-.62.63-1.15 1.12-2.17 1.5a9.678 9.678 0 0 0 4.95 4.95c.72.07 1.47.2 2.25.07a9.678 9.678 0 0 0 4.95-4.95c-.63-.62-1.15-1.12-1.5-2.17a9.678 9.678 0 0 0-4.95-4.95ZM12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2Z"/>
+                                </svg>
+                                Continue with Google
+                            </button>
+
+                            <button onclick="auth.initiateOAuth('microsoft')" class="provider-button w-full flex items-center justify-center px-4 py-3 border rounded-lg shadow-sm text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" style="background:rgba(255,255,255,0.04); border-color:rgba(255,255,255,0.1); color:#e8eaed;">
+                                <svg class="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M0 3.449C0 .965.965 0 2.154 0v4.5c0 1.189.965 2.154 2.154 2.154h4.5c1.189 0 2.154-.965 2.154-2.154V3.449C8.654 2.484 7.689 1.519 6.5 1.519S4.346 2.484 4.346 3.449v4.5c0 1.189.965 2.154 2.154 2.154h4.5c1.189 0 2.154-.965 2.154-2.154V3.449C13.154 2.484 12.189 1.519 11 1.519S8.846 2.484 8.846 3.449v4.5c0 1.189.965 2.154 2.154 2.154h4.5c1.189 0 2.154-.965 2.154-2.154V3.449C17.154 2.484 16.189 1.519 15 1.519S12.846 2.484 12.846 3.449v4.5c0 1.189.965 2.154 2.154 2.154h4.5c1.189 0 2.154-.965 2.154-2.154V3.449C21.154 2.484 20.189 1.519 19 1.519S16.846 2.484 16.846 3.449v4.5c0 1.189.965 2.154 2.154 2.154h4.5c1.189 0 2.154-.965 2.154-2.154V3.449Z"/>
+                                </svg>
+                                Continue with Microsoft
+                            </button>
+                        </div>
+
+                        <!-- Divider -->
+                        <div class="relative">
+                            <div class="absolute inset-0 flex items-center">
+                                <div class="w-full" style="border-top: 1px solid rgba(255,255,255,0.08);"></div>
+                            </div>
+                            <div class="relative flex justify-center text-sm">
+                                <span class="px-2" style="background:#0f1419; color:rgba(255,255,255,0.4);">Or continue with email</span>
+                            </div>
+                        </div>
+
+                        <!-- Email/Password Form -->
+                        <form id="loginForm" class="space-y-4">
+                            <div>
+                                <label for="email" class="block text-sm font-medium" style="color:rgba(255,255,255,0.7);">Email address</label>
+                                <div class="mt-1">
+                                    <input id="email" name="email" type="email" autocomplete="email" required class="appearance-none block w-full px-3 py-2 border rounded-lg sm:text-sm" style="background:rgba(255,255,255,0.05); border-color:rgba(255,255,255,0.1); color:#e8eaed;" placeholder="you@example.com">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label for="password" class="block text-sm font-medium" style="color:rgba(255,255,255,0.7);">Password</label>
+                                <div class="mt-1">
+                                    <input id="password" name="password" type="password" autocomplete="current-password" required class="appearance-none block w-full px-3 py-2 border rounded-lg sm:text-sm" style="background:rgba(255,255,255,0.05); border-color:rgba(255,255,255,0.1); color:#e8eaed;" placeholder="•••••••••">
+                                </div>
+                            </div>
+
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center">
+                                    <input id="remember-me" name="remember-me" type="checkbox" class="h-4 w-4 text-indigo-500 focus:ring-indigo-500 rounded" style="border-color:rgba(255,255,255,0.2); background:rgba(255,255,255,0.05);">
+                                    <label for="remember-me" class="ml-2 block text-sm" style="color:rgba(255,255,255,0.7);">Remember me</label>
+                                </div>
+                                <div class="text-sm">
+                                    <a href="#" class="font-medium" style="color:#818cf8;">Forgot your password?</a>
+                                </div>
+                            </div>
+
+                            <div>
+                                <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" style="background: linear-gradient(135deg, #6366f1, #8b5cf6, #06b6d4); box-shadow: 0 4px 15px rgba(99,102,241,0.3);">
+                                    Sign in
+                                </button>
+                            </div>
+                        </form>
+
+                        <!-- Demo Mode Notice -->
+                        <div class="mt-6 p-4 rounded-lg" style="background:rgba(99,102,241,0.08); border:1px solid rgba(99,102,241,0.2);">
+                            <div class="flex">
+                                <div class="flex-shrink-0">
+                                    <i class="fas fa-info-circle" style="color:#818cf8;"></i>
+                                </div>
+                                <div class="ml-3">
+                                    <h3 class="text-sm font-medium" style="color:#a5b4fc;">Demo Mode Active</h3>
+                                    <div class="mt-2 text-sm" style="color:rgba(255,255,255,0.5);">
+                                        <p>SSO providers are in demo mode. Click any provider to simulate authentication.</p>
+                                        <p class="mt-1">For production, configure your Google and Microsoft OAuth credentials.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Sign Up Link -->
+                        <p class="mt-6 text-center text-sm" style="color:rgba(255,255,255,0.5);">
+                            Don't have an account?
+                            <a href="#" class="font-medium" style="color:#818cf8;">Sign up for free</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize auth when DOM is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.auth) {
+                window.auth.init();
+            }
+        });
+
+        // Handle form submission
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            if (window.auth) {
+                const success = await window.auth.login(email, password);
+                if (success) {
+                    // Redirect will be handled by auth.js
+                    console.log('Login successful');
+                }
+            }
+        });
+
+        // Handle forgot password
+        document.querySelector('a[href="#"]').addEventListener('click', (e) => {
+            e.preventDefault();
+            if (e.target.textContent.includes('Forgot')) {
+                alert('Password reset functionality coming soon!');
+            } else if (e.target.textContent.includes('Sign up')) {
+                alert('Registration functionality coming soon!');
+            }
+        });
+    </script>
+</body>
+</html>

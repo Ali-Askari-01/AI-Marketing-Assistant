@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clear Authentication - AI Marketing Command Center</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 p-8">
+    <div class="max-w-md mx-auto">
+        <div class="bg-white rounded-lg shadow p-6">
+            <h1 class="text-xl font-bold mb-4">Clear Authentication Data</h1>
+            <p class="text-gray-600 mb-6">This will clear all stored authentication data and redirect you to the login page.</p>
+            
+            <button onclick="clearAllData()" class="w-full bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors">
+                Clear All Data & Go to Login
+            </button>
+        </div>
+    </div>
+    
+    <script>
+        function clearAllData() {
+            localStorage.removeItem('auth_token');
+            localStorage.removeItem('user_info');
+            localStorage.removeItem('refresh_token');
+            
+            // Clear any other potential data
+            localStorage.clear();
+            
+            // Redirect to login page
+            window.location.href = 'login.html';
+        }
+        
+        // Auto-clear after 2 seconds
+        setTimeout(clearAllData, 2000);
+    </script>
+</body>
+</html>
