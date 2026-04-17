@@ -76,3 +76,5 @@ uploads/*.jpeg
 
 # Duplicate nested project copy (not needed for deployment)
 AI-Marketing-Assistant-main/
+.vercel
+.env*.local
