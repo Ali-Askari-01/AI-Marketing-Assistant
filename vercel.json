@@ -2,7 +2,7 @@
     "experimentalServices": {
         "web": {
             "entrypoint": "ux design/web.py",
-            "routePrefix": "/_/web",
+            "routePrefix": "/",
             "buildCommand": "pip install -r ../requirements.txt"
         },
         "backend": {
