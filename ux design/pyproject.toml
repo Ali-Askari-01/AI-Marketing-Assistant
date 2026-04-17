@@ -1,0 +1,13 @@
+[project]
+name = "omni-mind-web"
+version = "0.1.0"
+description = "Web service for Omni Mind frontend on Vercel experimentalServices"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.104.0",
+    "starlette>=0.27.0"
+]
+
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
