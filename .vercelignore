@@ -1,0 +1,9 @@
+AI-Marketing-Assistant-main/
+*.md
+Test Plans/
+detailed design/
+Requirments/
+monitoring/
+langchain/
+scripts/
+*.db
