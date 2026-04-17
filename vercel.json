@@ -1,6 +1,7 @@
 {
     "experimentalServices": {
         "web": {
+            "framework": "static",
             "entrypoint": "ux design",
             "routePrefix": "/_/web"
         },
