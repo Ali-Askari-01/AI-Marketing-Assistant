@@ -1,7 +1,7 @@
 {
     "experimentalServices": {
         "web": {
-            "entrypoint": "ux design/index.html",
+            "entrypoint": "ux design/web.py",
             "routePrefix": "/_/web"
         },
         "backend": {
