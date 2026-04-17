@@ -1,8 +1,7 @@
 {
     "experimentalServices": {
         "web": {
-            "framework": "static",
-            "entrypoint": "ux design",
+            "entrypoint": "ux design/index.html",
             "routePrefix": "/_/web"
         },
         "backend": {
